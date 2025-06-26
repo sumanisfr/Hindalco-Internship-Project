@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hindalco Industries - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-image: url("/Images/bg_img.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+    </style>
+    <script src="index.js"></script>
+  </head>
+  <!-- Header -->
+
+  <body class="font-sans min-h-screen overflow-x-hidden">
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-md py-4 px-6 sm:px-10 flex items-center justify-between"
+    >
+      <h1 class="text-2xl sm:text-3xl font-bold text-hindalco-blue">
+        Tool Tracking Webapp
+      </h1>
+    </header>
+    <div class="relative min-h-screen flex flex-col lg:flex-row industrial-bg">
+      <!-- Industrial Elements -->
+      <div
+        class="absolute top-0 left-0 w-full h-full pointer-events-none -z-10"
+      >
+        <div
+          class="absolute top-[10%] left-[15%] w-2 h-2 bg-hindalco-gold rounded-full light animate-flicker"
+        ></div>
+        <div
+          class="absolute top-[15%] left-[35%] w-2 h-2 bg-hindalco-gold rounded-full light animate-flicker"
+          style="animation-delay: 0.2s"
+        ></div>
+        <div
+          class="absolute top-[8%] left-[55%] w-2 h-2 bg-hindalco-gold rounded-full light animate-flicker"
+          style="animation-delay: 0.3s"
+        ></div>
+        <div
+          class="absolute top-[12%] left-[75%] w-2 h-2 bg-hindalco-gold rounded-full light animate-flicker"
+          style="animation-delay: 0.4s"
+        ></div>
+        <div
+          class="absolute top-[18%] left-[85%] w-2 h-2 bg-hindalco-gold rounded-full light animate-flicker"
+          style="animation-delay: 0.5s"
+        ></div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="flex-1 p-6 sm:p-8 lg:p-10 text-white flex items-center">
+        <div class="max-w-4xl">
+          <div class="text-lg sm:text-xl leading-relaxed">
+            <span class="gradient">Hindalco Industries</span> has a major
+            presence in the
+            <span class="gradient">Sambalpur region of Odisha</span>, anchored
+            by its flagship
+            <span class="gradient">Aditya Aluminium complex at Lapanga</span>
+            and the
+            <span class="gradient"
+              >Hirakud smelter and captive power facilities</span
+            >. The <span class="gradient">Aditya Aluminium smelter</span>,
+            commissioned in 2007 and expanded in 2014, produces around
+            <span class="gradient">360,000 tpa</span> of high-quality primary
+            aluminium, powered by a
+            <span class="gradient">900 MW captive coal-based plant</span> plus a
+            <span class="gradient">30 MW solar installation</span> — making it
+            one of
+            <span class="gradient"
+              >India's largest integrated aluminium facilities</span
+            >.
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Section -->
+      <div
+        class="w-full lg:w-96 p-6 sm:p-8 lg:p-10 m-4 sm:m-6 lg:m-10 bg-white bg-opacity-95 rounded-xl shadow-2xl flex flex-col"
+      >
+        <div class="login-form">
+          <h2
+            class="text-gray-800 text-2xl sm:text-3xl mb-2 font-semibold flex items-center"
+          >
+            <i class="fas fa-user-shield mr-3 text-hindalco-purple"></i>Welcome
+          </h2>
+          <p class="text-gray-700 mb-6 sm:mb-8 text-sm sm:text-base">
+            Sign in to your account to continue
+          </p>
+
+          <form id="loginForm">
+            <div class="mb-4 sm:mb-5">
+              <label
+                for="email"
+                class="block text-gray-800 font-semibold mb-2 text-sm flex items-center"
+              >
+                <i class="fas fa-envelope mr-2 text-hindalco-purple"></i>Email:
+              </label>
+              <input
+                type="email"
+                id="email"
+                placeholder="admin/user@hindalco.com"
+                required
+                class="w-full py-2 sm:py-3 px-3 sm:px-4 border-2 border-gray-300 rounded-md text-sm transition-colors duration-300 focus:outline-none focus:border-green-500 placeholder-gray-400"
+              />
+            </div>
+
+            <div class="mb-4 sm:mb-5">
+              <label
+                for="password"
+                class="block text-gray-800 font-semibold mb-2 text-sm flex items-center"
+              >
+                <i class="fas fa-lock mr-2 text-hindalco-purple"></i>Password:
+              </label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+                class="w-full py-2 sm:py-3 px-3 sm:px-4 border-2 border-gray-300 rounded-md text-sm transition-colors duration-300 focus:outline-none focus:border-green-500 placeholder-gray-400"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-2 sm:py-3 bg-hindalco-purple text-white border-none rounded-md text-sm sm:text-base font-semibold cursor-pointer transition-colors duration-300 hover:bg-hindalco-purple-dark mb-4 sm:mb-5 flex items-center justify-center"
+            >
+              <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+            </button>
+
+            <div class="text-left text-gray-600 text-xs sm:text-sm">
+              Don't have an account?
+              <a
+                href="#"
+                id="registerLink"
+                class="text-hindalco-purple no-underline hover:underline"
+              >
+                <i class="fas fa-user-plus mr-1"></i>Register here
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <section
+      class="bg-gray-50 py-12 sm:py-16 lg:py-20 px-6 sm:px-8 lg:px-15 text-gray-800"
+    >
+      <div class="max-w-6xl mx-auto">
+        <h2
+          class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 text-gray-800 text-center flex items-center justify-center"
+        >
+          <i class="fas fa-industry mr-4 text-hindalco-purple"></i>About
+          Hindalco Industries
+        </h2>
+        <div
+          class="grid md:grid-cols-2 gap-8 sm:gap-12 lg:gap-15 mb-10 sm:mb-12 lg:mb-15"
+        >
+          <div class="text-base sm:text-lg leading-relaxed text-gray-600">
+            <p class="mb-4 sm:mb-5">
+              Hindalco Industries Limited is India's largest aluminium producer
+              and Asia's largest aluminium rolling company. As the metals
+              flagship of the Aditya Birla Group, Hindalco is a global leader in
+              aluminium and copper production with operations spanning across
+              India, China, and the United States.
+            </p>
+
+            <p class="mb-4 sm:mb-5">
+              With over six decades of experience, Hindalco has established
+              itself as a pioneer in the metals industry, continuously
+              innovating and expanding its capabilities. The company operates
+              state-of-the-art facilities and maintains a strong commitment to
+              sustainable practices and environmental stewardship.
+            </p>
+
+            <p class="mb-4 sm:mb-5">
+              Our integrated business model encompasses the entire value chain -
+              from mining and refining to smelting and downstream processing.
+              This vertical integration ensures quality control, cost
+              efficiency, and reliable supply chains for our customers
+              worldwide.
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-hindalco-purple to-purple-600 p-6 sm:p-8 lg:p-10 rounded-2xl text-white"
+          >
+            <div
+              class="flex justify-between items-center py-3 sm:py-4 border-b border-white border-opacity-20"
+            >
+              <span class="text-sm sm:text-base font-medium flex items-center">
+                <i class="fas fa-chart-bar mr-2"></i>Annual Aluminium Capacity
+              </span>
+              <span class="text-xl sm:text-2xl font-bold text-hindalco-gold"
+                >1.5 MT</span
+              >
+            </div>
+            <div
+              class="flex justify-between items-center py-3 sm:py-4 border-b border-white border-opacity-20"
+            >
+              <span class="text-sm sm:text-base font-medium flex items-center">
+                <i class="fas fa-coins mr-2"></i>Copper Capacity
+              </span>
+              <span class="text-xl sm:text-2xl font-bold text-hindalco-gold"
+                >0.5 MT</span
+              >
+            </div>
+            <div
+              class="flex justify-between items-center py-3 sm:py-4 border-b border-white border-opacity-20"
+            >
+              <span class="text-sm sm:text-base font-medium flex items-center">
+                <i class="fas fa-calendar-alt mr-2"></i>Years of Excellence
+              </span>
+              <span class="text-xl sm:text-2xl font-bold text-hindalco-gold"
+                >60+</span
+              >
+            </div>
+            <div
+              class="flex justify-between items-center py-3 sm:py-4 border-b border-white border-opacity-20"
+            >
+              <span class="text-sm sm:text-base font-medium flex items-center">
+                <i class="fas fa-globe mr-2"></i>Countries Presence
+              </span>
+              <span class="text-xl sm:text-2xl font-bold text-hindalco-gold"
+                >10+</span
+              >
+            </div>
+            <div class="flex justify-between items-center py-3 sm:py-4">
+              <span class="text-sm sm:text-base font-medium flex items-center">
+                <i class="fas fa-users mr-2"></i>Employees Worldwide
+              </span>
+              <span class="text-xl sm:text-2xl font-bold text-hindalco-gold"
+                >25,000+</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-hindalco-blue text-white py-6 sm:py-8 lg:py-10">
+      <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-15">
+        <div class="text-center mb-8 sm:mb-10">
+          <div class="flex justify-center items-center mb-6">
+            <img
+              src="/Images/logo_Hindalco.jpg"
+              alt="Hindalco Industries Logo"
+              class="h-30 sm:h-24 lg:h-32 w-auto"
+            />
+          </div>
+          <h3
+            class="text-xl sm:text-2xl mb-4 sm:mb-5 font-semibold flex items-center justify-center"
+          >
+            <i class="fas fa-share-alt mr-3"></i>Connect With Us
+          </h3>
+          <div
+            class="flex justify-center gap-3 sm:gap-5 mb-4 sm:mb-5 flex-wrap"
+          >
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-700"
+              title="Facebook"
+            >
+              <i class="fab fa-facebook-f text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-black"
+              title="X (Twitter)"
+            >
+              <i class="fab fa-x-twitter text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-red-600"
+              title="YouTube"
+            >
+              <i class="fab fa-youtube text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-600"
+              title="LinkedIn"
+            >
+              <i class="fab fa-linkedin-in text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"
+              title="Instagram"
+            >
+              <i class="fab fa-instagram text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-red-700"
+              title="Pinterest"
+            >
+              <i class="fab fa-pinterest-p text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-500"
+              title="Telegram"
+            >
+              <i
+                class="fab fa-telegram-plane text-white text-lg sm:text-xl"
+              ></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-green-500"
+              title="WhatsApp"
+            >
+              <i class="fab fa-whatsapp text-white text-lg sm:text-xl"></i>
+            </div>
+          </div>
+          <div
+            class="text-center text-sm sm:text-base text-gray-300 mb-8 sm:mb-10"
+          >
+            Site best viewed at 1280 × 720 resolution in Microsoft Edge 100+,
+            Mozilla 100+, Google Chrome 111+
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 mb-8 sm:mb-10"
+        >
+          <div>
+            <h4
+              class="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 text-hindalco-gold flex items-center"
+            >
+              <i class="fas fa-building mr-2"></i>Company
+            </h4>
+            <ul class="list-none">
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>About Us</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Careers</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i
+                  >Leadership</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i
+                  >Sustainability</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>News &
+                  Media</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 text-hindalco-gold flex items-center"
+            >
+              <i class="fas fa-cube mr-2"></i>Products
+            </h4>
+            <ul class="list-none">
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Aluminium</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Copper</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Rolled
+                  Products</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i
+                  >Extrusions</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Foil</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 text-hindalco-gold flex items-center"
+            >
+              <i class="fas fa-cogs mr-2"></i>Services
+            </h4>
+            <ul class="list-none">
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Customer
+                  Support</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Technical
+                  Services</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Quality
+                  Assurance</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Logistics</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>R&D</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 text-hindalco-gold flex items-center"
+            >
+              <i class="fas fa-phone mr-2"></i>Contact
+            </h4>
+            <ul class="list-none">
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Head
+                  Office</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Regional
+                  Offices</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Plant
+                  Locations</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Investor
+                  Relations</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="text-gray-300 no-underline transition-colors duration-300 hover:text-hindalco-gold flex items-center"
+                  ><i class="fas fa-chevron-right mr-2 text-xs"></i>Support</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-600 pt-4 sm:pt-5 text-center text-gray-400 text-sm"
+        >
+          <p>
+            &copy; 2025 Hindalco Industries Limited. All rights reserved. |
+            Privacy Policy | Terms of Service
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

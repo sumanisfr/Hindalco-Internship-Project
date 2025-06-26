@@ -1,0 +1,100 @@
+/* Tailwind Configuration */
+:root {
+  --hindalco-purple: #6B46C1;
+  --hindalco-purple-dark: #553C9A;
+  --hindalco-gold: #FFD700;
+  --hindalco-blue: #1e3a8a;
+}
+
+/* Custom Tailwind Configuration */
+.text-hindalco-purple { color: var(--hindalco-purple); }
+.text-hindalco-gold { color: var(--hindalco-gold); }
+.bg-hindalco-purple { background-color: var(--hindalco-purple); }
+.bg-hindalco-purple-dark { background-color: var(--hindalco-purple-dark); }
+.bg-hindalco-gold { background-color: var(--hindalco-gold); }
+.bg-hindalco-blue { background-color: var(--hindalco-blue); }
+.border-hindalco-purple { border-color: var(--hindalco-purple); }
+
+/* Industrial Background */
+.industrial-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("./images/bg_img.png") center/cover;
+}
+
+/* Light Effect */
+.light {
+  box-shadow: 0 0 20px #ffd700;
+}
+
+/* Flicker Animation */
+@keyframes flicker {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+.animate-flicker {
+  animation: flicker 2s infinite alternate;
+}
+
+/* Gradient Text Effect */
+.gradient {
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+    #5704fc,
+    #ff4b2b,
+    #ffcc00,
+    #1aff00,
+    #1e90ff,
+    #8a2be2,
+    #ff416c
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.5s ease-in-out;
+}
+
+.gradient:hover {
+  animation: colorFlow 5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Color Flow Animation */
+@keyframes colorFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Hover Effects */
+.hover\:bg-hindalco-purple-dark:hover {
+  background-color: var(--hindalco-purple-dark);
+}
+
+.hover\:text-hindalco-gold:hover {
+  color: var(--hindalco-gold);
+}
+
+/* Focus States */
+.focus\:border-green-500:focus {
+  border-color: #10b981;
+}
+
+/* Additional Utility Classes */
+.no-underline {
+  text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .industrial-bg {
+    background-attachment: scroll;
+  }
+}
