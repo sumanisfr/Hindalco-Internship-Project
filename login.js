@@ -44,9 +44,14 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Please fill in all fields.");
         return;
       }
-
+      // Redirect to user.html after successful login
+      if (email === "user@hindalco.com" && password === "password") {
+        alert("Login successful!");
+        window.location.href = "user.html";
+        return;
+      }
       // Simulate login
-      if (email === "admin@hindalco.com" && password === "password") {
+      if (email === "user@hindalco.com" && password === "password") {
         alert("Login successful!");
       } else {
         alert("Invalid email or password.");
@@ -67,7 +72,7 @@ if (navbarToggle) {
 }
 // Smooth Scroll for Anchor Links
 
-const anchorLinks = document.querySelectorAll('a[href^="#"]');
+const anchorLinks = document.querySelectorAll('a[href^="user.html"]');
 anchorLinks.forEach((link) => {
   link.addEventListener("click", function (e) {
     e.preventDefault();

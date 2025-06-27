@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Registration Page</h1>
+    <form id="registrationForm">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      </div>
+      <div>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+          <option value="admin">Admin</option>
+
+          <option value="manager">Manager</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+      <div>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required />
+      </div>
+      <div>
+        <label for="employeeId">Employee ID:</label>
+        <input type="text" id="employeeId" name="employeeId" required />
+      </div>
+      <div>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required />
+      </div>
+      <a href="login.html">Already have an account? Login here</a>
+      <!-- <a href="forgot-password.html">Forgot your password?</a> -->
+      <a
+        href="login.html"
+        id="registerLink"
+        class="text-hindalco-purple no-underline hover:underline"
+      >
+        <i class="fas fa-user-plus mr-1"></i>Register
+      </a>
+    </form>
+  </body>
+</html>
+<style>
+  body {
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  form {
+    max-width: 400px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  div {
+    margin-bottom: 15px;
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  input,
+  select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #218838;
+  }
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+  }
+</style>
+
+<script>
+  document
+    .getElementById("registrationForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get form values
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const role = document.getElementById("role").value;
+      const department = document.getElementById("department  ").value;
+      const employeeId = document.getElementById("employeeId").value;
+      const phone = document.getElementById("phone").value;
+      // Validate form values
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      // Simulate successful registration
+      alert("Registration successful");
+      window.location.href = "login.html";
+    });
+</script>
