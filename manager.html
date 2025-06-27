@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hindalco Industries - Manager Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Tailwind Configuration */
+      :root {
+        --hindalco-purple: #6b46c1;
+        --hindalco-purple-dark: #553c9a;
+        --hindalco-gold: #ffd700;
+        --hindalco-blue: #1e3a8a;
+        --hindalco-light-blue: #add8e6;
+      }
+
+      /* Custom Tailwind Configuration */
+      .text-hindalco-purple {
+        color: var(--hindalco-purple);
+      }
+
+      .text-hindalco-gold {
+        color: var(--hindalco-gold);
+      }
+
+      .bg-hindalco-purple {
+        background-color: var(--hindalco-purple);
+      }
+
+      .bg-hindalco-purple-dark {
+        background-color: var(--hindalco-purple-dark);
+      }
+
+      .bg-hindalco-gold {
+        background-color: var(--hindalco-gold);
+      }
+
+      .bg-hindalco-blue {
+        background-color: var(--hindalco-blue);
+      }
+
+      .bg-hindalco-light-blue {
+        background-color: var(--hindalco-light-blue);
+      }
+
+      .border-hindalco-purple {
+        border-color: var(--hindalco-purple);
+      }
+
+      /* Industrial Background */
+      body {
+        background-color: #f0f2f5;
+      }
+
+      /* Dropdown Styles */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        border-radius: 8px;
+        right: 0;
+        top: 100%;
+        margin-top: 5px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .dropdown-content.show {
+        display: block;
+      }
+
+      .dropdown-content a {
+        color: #374151;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.2s;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f3f4f6;
+      }
+
+      .dropdown-content .divider {
+        height: 1px;
+        background-color: #e5e7eb;
+        margin: 4px 0;
+      }
+
+      /* Mobile Menu Styles */
+      .mobile-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+      }
+
+      .mobile-menu.show {
+        display: block;
+      }
+
+      /* Gradient Text Effect */
+      .gradient {
+        font-weight: 700;
+        background: linear-gradient(
+          90deg,
+          #5704fc,
+          #ff4b2b,
+          #ffcc00,
+          #1aff00,
+          #1e90ff,
+          #8a2be2,
+          #ff416c
+        );
+        background-size: 300% 300%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.5s ease-in-out;
+      }
+
+      .gradient:hover {
+        animation: colorFlow 5s ease-in-out infinite;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      }
+
+      @keyframes colorFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Active navigation state */
+      .nav-active {
+        color: var(--hindalco-purple);
+        font-weight: 600;
+      }
+
+      /* Hover Effects */
+      .hover\:bg-hindalco-purple-dark:hover {
+        background-color: var(--hindalco-purple-dark);
+      }
+
+      .hover\:text-hindalco-gold:hover {
+        color: var(--hindalco-gold);
+      }
+
+      /* Focus States */
+      .focus\:border-green-500:focus {
+        border-color: #10b981;
+      }
+
+      /* Additional Utility Classes */
+      .no-underline {
+        text-decoration: none;
+      }
+
+      /* Content sections */
+      .content-section {
+        display: none;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+    </style>
+    <script>
+      // Tailwind CSS Configuration
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "hindalco-purple": "#6B46C1",
+              "hindalco-purple-dark": "#553C9A",
+              "hindalco-gold": "#FFD700",
+              "hindalco-blue": "#1e3a8a",
+              "hindalco-light-blue": "#ADD8E6",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+
+      // Global state management
+      let currentSection = "dashboard";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeDashboard();
+        setupNavigation();
+        setupDropdowns();
+        setupMobileMenu();
+      });
+
+      function initializeDashboard() {
+        // Dummy data for demonstration
+        const totalTools = 500;
+        const availableTools = 350;
+        const inUseTools = 120;
+        const maintenanceTools = 30;
+
+        document.getElementById("totalTools").textContent = totalTools;
+        document.getElementById("availableTools").textContent = availableTools;
+        document.getElementById("inUseTools").textContent = inUseTools;
+        document.getElementById("maintenanceTools").textContent =
+          maintenanceTools;
+
+        loadToolStatusData();
+        loadRecentActivityData();
+        loadToolsData();
+        loadUsersData();
+        loadReportsData();
+      }
+
+      function setupNavigation() {
+        // Navigation event handlers
+        document.querySelectorAll("[data-section]").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const section = e.target.getAttribute("data-section");
+            showSection(section);
+          });
+        });
+      }
+
+      function setupDropdowns() {
+        // Profile dropdown toggle
+        const profileDropdown = document.getElementById("profileDropdown");
+        const profileMenu = document.getElementById("profileMenu");
+
+        if (profileDropdown && profileMenu) {
+          profileDropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle("show");
+          });
+
+          // Close dropdown when clicking outside
+          document.addEventListener("click", () => {
+            profileMenu.classList.remove("show");
+          });
+        }
+      }
+
+      function setupMobileMenu() {
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (mobileMenuBtn && mobileMenu) {
+          mobileMenuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("show");
+          });
+        }
+      }
+
+      function showSection(sectionName) {
+        // Hide all sections
+        document.querySelectorAll(".content-section").forEach((section) => {
+          section.classList.remove("active");
+        });
+
+        // Show selected section
+        const targetSection = document.getElementById(sectionName + "Section");
+        if (targetSection) {
+          targetSection.classList.add("active");
+        }
+
+        // Update navigation active state
+        document.querySelectorAll("[data-section]").forEach((link) => {
+          link.classList.remove("nav-active");
+        });
+        document
+          .querySelectorAll(`[data-section="${sectionName}"]`)
+          .forEach((link) => {
+            link.classList.add("nav-active");
+          });
+
+        currentSection = sectionName;
+
+        // Close mobile menu
+        const mobileMenu = document.getElementById("mobileMenu");
+        if (mobileMenu) {
+          mobileMenu.classList.remove("show");
+        }
+      }
+
+      function logout() {
+        // Show confirmation dialog
+        if (confirm("Are you sure you want to logout?")) {
+          // Clear any session data (if needed)
+          sessionStorage.clear();
+
+          // Redirect to index.html
+          window.location.href = "index.html";
+        }
+      }
+
+      function loadToolStatusData() {
+        const toolStatusData = [
+          {
+            id: "T001",
+            name: "Drill Machine",
+            status: "Available",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-20",
+          },
+          {
+            id: "T002",
+            name: "Welding Torch",
+            status: "In Use",
+            assignedTo: "Ramesh Singh",
+            lastCheck: "2025-06-25",
+          },
+          {
+            id: "T003",
+            name: "Grinder",
+            status: "Maintenance",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-22",
+          },
+          {
+            id: "T004",
+            name: "Impact Wrench",
+            status: "Available",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-18",
+          },
+          {
+            id: "T005",
+            name: "Saw (Circular)",
+            status: "In Use",
+            assignedTo: "Priya Sharma",
+            lastCheck: "2025-06-26",
+          },
+          {
+            id: "T006",
+            name: "Leveler",
+            status: "Available",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-21",
+          },
+          {
+            id: "T007",
+            name: "Measuring Tape",
+            status: "Available",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-19",
+          },
+          {
+            id: "T008",
+            name: "Crane (Small)",
+            status: "Maintenance",
+            assignedTo: "N/A",
+            lastCheck: "2025-06-23",
+          },
+        ];
+
+        const toolStatusBody = document.getElementById("toolStatusBody");
+        toolStatusBody.innerHTML = "";
+        toolStatusData.forEach((tool) => {
+          const row = toolStatusBody.insertRow();
+          row.insertCell().textContent = tool.id;
+          row.insertCell().textContent = tool.name;
+
+          const statusCell = row.insertCell();
+          statusCell.innerHTML = `<span class="px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(
+            tool.status
+          )}">${tool.status}</span>`;
+
+          row.insertCell().textContent = tool.assignedTo;
+          row.insertCell().textContent = tool.lastCheck;
+        });
+      }
+
+      function loadRecentActivityData() {
+        const recentActivityData = [
+          {
+            timestamp: "2025-06-27 10:30 AM",
+            toolId: "T005",
+            action: "Issued",
+            by: "Manager A",
+            to: "Priya Sharma",
+          },
+          {
+            timestamp: "2025-06-27 09:45 AM",
+            toolId: "T002",
+            action: "Returned",
+            by: "Ramesh Singh",
+            to: "Manager B",
+          },
+          {
+            timestamp: "2025-06-26 04:00 PM",
+            toolId: "T003",
+            action: "Sent for Maintenance",
+            by: "Manager C",
+            to: "Maintenance Dept",
+          },
+          {
+            timestamp: "2025-06-26 02:15 PM",
+            toolId: "T001",
+            action: "Checked",
+            by: "Technician X",
+            to: "N/A",
+          },
+        ];
+
+        const recentActivityBody =
+          document.getElementById("recentActivityBody");
+        recentActivityBody.innerHTML = "";
+        recentActivityData.forEach((activity) => {
+          const row = recentActivityBody.insertRow();
+          row.insertCell().textContent = activity.timestamp;
+          row.insertCell().textContent = activity.toolId;
+          row.insertCell().textContent = activity.action;
+          row.insertCell().textContent = activity.by;
+          row.insertCell().textContent = activity.to;
+        });
+      }
+
+      function loadToolsData() {
+        const toolsData = [
+          {
+            id: "T001",
+            name: "Drill Machine",
+            category: "Power Tools",
+            condition: "Good",
+            location: "Warehouse A",
+            value: "₹15,000",
+          },
+          {
+            id: "T002",
+            name: "Welding Torch",
+            category: "Welding",
+            condition: "Excellent",
+            location: "Workshop B",
+            value: "₹25,000",
+          },
+          {
+            id: "T003",
+            name: "Grinder",
+            category: "Cutting Tools",
+            condition: "Under Repair",
+            location: "Maintenance",
+            value: "₹8,000",
+          },
+          {
+            id: "T004",
+            name: "Impact Wrench",
+            category: "Power Tools",
+            condition: "Good",
+            location: "Warehouse A",
+            value: "₹12,000",
+          },
+          {
+            id: "T005",
+            name: "Saw (Circular)",
+            category: "Cutting Tools",
+            condition: "Excellent",
+            location: "Workshop C",
+            value: "₹18,000",
+          },
+        ];
+
+        const toolsTableBody = document.getElementById("toolsTableBody");
+        toolsTableBody.innerHTML = "";
+        toolsData.forEach((tool) => {
+          const row = toolsTableBody.insertRow();
+          row.insertCell().textContent = tool.id;
+          row.insertCell().textContent = tool.name;
+          row.insertCell().textContent = tool.category;
+
+          const conditionCell = row.insertCell();
+          conditionCell.innerHTML = `<span class="px-2 py-1 rounded-full text-xs font-medium ${getConditionClass(
+            tool.condition
+          )}">${tool.condition}</span>`;
+
+          row.insertCell().textContent = tool.location;
+          row.insertCell().textContent = tool.value;
+
+          const actionCell = row.insertCell();
+          actionCell.innerHTML = `
+            <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="editTool('${tool.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="text-red-600 hover:text-red-800" onclick="deleteTool('${tool.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          `;
+        });
+      }
+
+      function loadUsersData() {
+        const usersData = [
+          {
+            id: "U001",
+            name: "Rajesh Kumar",
+            role: "Technician",
+            department: "Maintenance",
+            email: "rajesh.kumar@hindalco.com",
+            status: "Active",
+          },
+          {
+            id: "U002",
+            name: "Priya Sharma",
+            role: "Engineer",
+            department: "Production",
+            email: "priya.sharma@hindalco.com",
+            status: "Active",
+          },
+          {
+            id: "U003",
+            name: "Ramesh Singh",
+            role: "Operator",
+            department: "Operations",
+            email: "ramesh.singh@hindalco.com",
+            status: "Active",
+          },
+          {
+            id: "U004",
+            name: "Anita Patel",
+            role: "Supervisor",
+            department: "Quality Control",
+            email: "anita.patel@hindalco.com",
+            status: "Inactive",
+          },
+          {
+            id: "U005",
+            name: "Vikram Rao",
+            role: "Manager",
+            department: "Production",
+            email: "vikram.rao@hindalco.com",
+            status: "Active",
+          },
+        ];
+
+        const usersTableBody = document.getElementById("usersTableBody");
+        usersTableBody.innerHTML = "";
+        usersData.forEach((user) => {
+          const row = usersTableBody.insertRow();
+          row.insertCell().textContent = user.id;
+          row.insertCell().textContent = user.name;
+          row.insertCell().textContent = user.role;
+          row.insertCell().textContent = user.department;
+          row.insertCell().textContent = user.email;
+
+          const statusCell = row.insertCell();
+          statusCell.innerHTML = `<span class="px-2 py-1 rounded-full text-xs font-medium ${
+            user.status === "Active"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }">${user.status}</span>`;
+
+          const actionCell = row.insertCell();
+          actionCell.innerHTML = `
+            <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="editUser('${user.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="text-red-600 hover:text-red-800" onclick="deleteUser('${user.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          `;
+        });
+      }
+
+      function loadReportsData() {
+        const reportsData = [
+          {
+            name: "Monthly Tool Usage Report",
+            type: "Usage",
+            date: "2025-06-01",
+            status: "Generated",
+          },
+          {
+            name: "Tool Maintenance Schedule",
+            type: "Maintenance",
+            date: "2025-06-15",
+            status: "Pending",
+          },
+          {
+            name: "Equipment Inventory Report",
+            type: "Inventory",
+            date: "2025-06-20",
+            status: "Generated",
+          },
+          {
+            name: "User Activity Summary",
+            type: "Activity",
+            date: "2025-06-25",
+            status: "Generated",
+          },
+          {
+            name: "Cost Analysis Report",
+            type: "Financial",
+            date: "2025-06-27",
+            status: "In Progress",
+          },
+        ];
+
+        const reportsTableBody = document.getElementById("reportsTableBody");
+        reportsTableBody.innerHTML = "";
+        reportsData.forEach((report) => {
+          const row = reportsTableBody.insertRow();
+          row.insertCell().textContent = report.name;
+          row.insertCell().textContent = report.type;
+          row.insertCell().textContent = report.date;
+
+          const statusCell = row.insertCell();
+          statusCell.innerHTML = `<span class="px-2 py-1 rounded-full text-xs font-medium ${getReportStatusClass(
+            report.status
+          )}">${report.status}</span>`;
+
+          const actionCell = row.insertCell();
+          actionCell.innerHTML = `
+            <button class="text-blue-600 hover:text-blue-800 mr-2" onclick="downloadReport('${report.name}')">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="text-green-600 hover:text-green-800" onclick="viewReport('${report.name}')">
+              <i class="fas fa-eye"></i>
+            </button>
+          `;
+        });
+      }
+
+      function getStatusClass(status) {
+        switch (status) {
+          case "Available":
+            return "bg-green-100 text-green-800";
+          case "In Use":
+            return "bg-yellow-100 text-yellow-800";
+          case "Maintenance":
+            return "bg-red-100 text-red-800";
+          default:
+            return "bg-gray-100 text-gray-800";
+        }
+      }
+
+      function getConditionClass(condition) {
+        switch (condition) {
+          case "Excellent":
+            return "bg-green-100 text-green-800";
+          case "Good":
+            return "bg-blue-100 text-blue-800";
+          case "Under Repair":
+            return "bg-red-100 text-red-800";
+          default:
+            return "bg-gray-100 text-gray-800";
+        }
+      }
+
+      function getReportStatusClass(status) {
+        switch (status) {
+          case "Generated":
+            return "bg-green-100 text-green-800";
+          case "In Progress":
+            return "bg-yellow-100 text-yellow-800";
+          case "Pending":
+            return "bg-red-100 text-red-800";
+          default:
+            return "bg-gray-100 text-gray-800";
+        }
+      }
+
+      // Tool management functions
+      function addTool() {
+        alert("Add Tool functionality - To be implemented");
+      }
+
+      function editTool(toolId) {
+        alert(`Edit Tool ${toolId} - To be implemented`);
+      }
+
+      function deleteTool(toolId) {
+        if (confirm(`Are you sure you want to delete tool ${toolId}?`)) {
+          alert(`Tool ${toolId} deleted - To be implemented`);
+        }
+      }
+
+      // User management functions
+      function addUser() {
+        alert("Add User functionality - To be implemented");
+      }
+
+      function editUser(userId) {
+        alert(`Edit User ${userId} - To be implemented`);
+      }
+
+      function deleteUser(userId) {
+        if (confirm(`Are you sure you want to delete user ${userId}?`)) {
+          alert(`User ${userId} deleted - To be implemented`);
+        }
+      }
+
+      // Report functions
+      function generateReport() {
+        alert("Generate Report functionality - To be implemented");
+      }
+
+      function downloadReport(reportName) {
+        alert(`Download ${reportName} - To be implemented`);
+      }
+
+      function viewReport(reportName) {
+        alert(`View ${reportName} - To be implemented`);
+      }
+    </script>
+  </head>
+
+  <body class="font-sans min-h-screen">
+    <header
+      class="bg-white/90 backdrop-blur-md shadow-lg py-4 px-6 sm:px-10 flex items-center justify-between relative"
+    >
+      <div class="flex items-center gap-4">
+        <i class="fas fa-tools text-hindalco-purple text-3xl sm:text-4xl"></i>
+        <h1
+          class="text-2xl sm:text-3xl font-extrabold text-hindalco-blue tracking-wide"
+        >
+          Tool Tracking Webapp
+        </h1>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex gap-5">
+          <a
+            href="#"
+            data-section="dashboard"
+            class="nav-active text-hindalco-blue hover:text-hindalco-purple font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-tachometer-alt mr-1"></i>Dashboard
+          </a>
+          <a
+            href="#"
+            data-section="tools"
+            class="text-hindalco-blue hover:text-hindalco-purple font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-tools mr-1"></i>Tools
+          </a>
+          <a
+            href="#"
+            data-section="users"
+            class="text-hindalco-blue hover:text-hindalco-purple font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-users mr-1"></i>Users
+          </a>
+          <a
+            href="#"
+            data-section="reports"
+            class="text-hindalco-blue hover:text-hindalco-purple font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-chart-bar mr-1"></i>Reports
+          </a>
+        </nav>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown">
+          <button
+            id="profileDropdown"
+            class="flex items-center gap-2 text-hindalco-blue hover:text-hindalco-purple transition-colors duration-200"
+          >
+            <i class="fas fa-user-circle text-2xl"></i>
+            <span class="hidden sm:inline">Manager</span>
+            <i class="fas fa-chevron-down text-sm"></i>
+          </button>
+          <div id="profileMenu" class="dropdown-content">
+            <a href="#" onclick="alert('Profile settings - To be implemented')">
+              <i class="fas fa-user mr-2"></i>Profile Settings
+            </a>
+            <a href="#" onclick="alert('Account settings - To be implemented')">
+              <i class="fas fa-cog mr-2"></i>Account Settings
+            </a>
+            <div class="divider"></div>
+            <a href="#" onclick="logout()" class="text-red-600">
+              <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobileMenuBtn"
+          type="button"
+          class="lg:hidden text-hindalco-blue text-xl"
+          aria-label="Toggle mobile menu"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <img
+          src="/Images/logo_Hindalco.jpg"
+          alt="Hindalco Logo"
+          class="h-10 sm:h-12 w-auto rounded-md shadow-md"
+        />
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="mobile-menu">
+        <div class="px-4 py-2 space-y-2">
+          <a
+            href="#"
+            data-section="dashboard"
+            class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
+          >
+            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+          </a>
+          <a
+            href="#"
+            data-section="tools"
+            class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
+          >
+            <i class="fas fa-tools mr-2"></i>Tools
+          </a>
+          <a
+            href="#"
+            data-section="users"
+            class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
+          >
+            <i class="fas fa-users mr-2"></i>Users
+          </a>
+          <a
+            href="#"
+            data-section="reports"
+            class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
+          >
+            <i class="fas fa-chart-bar mr-2"></i>Reports
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <!-- Dashboard Section -->
+      <div id="dashboardSection" class="content-section active">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-tachometer-alt mr-3 text-hindalco-purple"></i>Manager
+          Dashboard
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div
+            class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+          >
+            <div>
+              <p class="text-gray-500 text-sm">Total Tools</p>
+              <p
+                id="totalTools"
+                class="text-3xl font-bold text-hindalco-blue"
+              ></p>
+            </div>
+            <i
+              class="fas fa-toolbox text-5xl text-hindalco-purple-dark opacity-20"
+            ></i>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+          >
+            <div>
+              <p class="text-gray-500 text-sm">Available Tools</p>
+              <p
+                id="availableTools"
+                class="text-3xl font-bold text-green-600"
+              ></p>
+            </div>
+            <i
+              class="fas fa-check-circle text-5xl text-green-600 opacity-20"
+            ></i>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+          >
+            <div>
+              <p class="text-gray-500 text-sm">Tools In Use</p>
+              <p id="inUseTools" class="text-3xl font-bold text-yellow-600"></p>
+            </div>
+            <i class="fas fa-handshake text-5xl text-yellow-600 opacity-20"></i>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+          >
+            <div>
+              <p class="text-gray-500 text-sm">Under Maintenance</p>
+              <p
+                id="maintenanceTools"
+                class="text-3xl font-bold text-red-600"
+              ></p>
+            </div>
+            <i class="fas fa-wrench text-5xl text-red-600 opacity-20"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+            <h3
+              class="text-xl font-semibold text-gray-800 mb-4 flex items-center"
+            >
+              <i class="fas fa-list-alt mr-2 text-hindalco-purple"></i>Tool
+              Status
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white">
+                <thead>
+                  <tr class="bg-hindalco-blue text-white">
+                    <th class="py-2 px-4 text-left">Tool ID</th>
+                    <th class="py-2 px-4 text-left">Name</th>
+                    <th class="py-2 px-4 text-left">Status</th>
+                    <th class="py-2 px-4 text-left">Assigned To</th>
+                    <th class="py-2 px-4 text-left">Last Checked</th>
+                  </tr>
+                </thead>
+                <tbody id="toolStatusBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3
+              class="text-xl font-semibold text-gray-800 mb-4 flex items-center"
+            >
+              <i class="fas fa-history mr-2 text-hindalco-purple"></i>Recent
+              Activity
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white">
+                <thead>
+                  <tr class="bg-hindalco-blue text-white">
+                    <th class="py-2 px-4 text-left">Timestamp</th>
+                    <th class="py-2 px-4 text-left">Tool ID</th>
+                    <th class="py-2 px-4 text-left">Action</th>
+                    <th class="py-2 px-4 text-left">By</th>
+                    <th class="py-2 px-4 text-left">To</th>
+                  </tr>
+                </thead>
+                <tbody id="recentActivityBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools Section -->
+      <div id="toolsSection" class="content-section">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-tools mr-3 text-hindalco-purple"></i>Tools
+            Management
+          </h2>
+          <button
+            onclick="addTool()"
+            class="bg-hindalco-purple hover:bg-hindalco-purple-dark text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <i class="fas fa-plus"></i>Add Tool
+          </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Search tools..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              />
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Categories</option>
+                <option value="power-tools">Power Tools</option>
+                <option value="hand-tools">Hand Tools</option>
+                <option value="measuring">Measuring Tools</option>
+                <option value="cutting">Cutting Tools</option>
+                <option value="welding">Welding Equipment</option>
+              </select>
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Status</option>
+                <option value="available">Available</option>
+                <option value="in-use">In Use</option>
+                <option value="maintenance">Under Maintenance</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-hindalco-blue text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">Tool ID</th>
+                  <th class="py-3 px-4 text-left">Name</th>
+                  <th class="py-3 px-4 text-left">Category</th>
+                  <th class="py-3 px-4 text-left">Condition</th>
+                  <th class="py-3 px-4 text-left">Location</th>
+                  <th class="py-3 px-4 text-left">Value</th>
+                  <th class="py-3 px-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="toolsTableBody"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Section -->
+      <div id="usersSection" class="content-section">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-users mr-3 text-hindalco-purple"></i>Users
+            Management
+          </h2>
+          <button
+            onclick="addUser()"
+            class="bg-hindalco-purple hover:bg-hindalco-purple-dark text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <i class="fas fa-user-plus"></i>Add User
+          </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Search users..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              />
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Departments</option>
+                <option value="production">Production</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="operations">Operations</option>
+                <option value="quality">Quality Control</option>
+              </select>
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Roles</option>
+                <option value="manager">Manager</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="engineer">Engineer</option>
+                <option value="technician">Technician</option>
+                <option value="operator">Operator</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-hindalco-blue text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">User ID</th>
+                  <th class="py-3 px-4 text-left">Name</th>
+                  <th class="py-3 px-4 text-left">Role</th>
+                  <th class="py-3 px-4 text-left">Department</th>
+                  <th class="py-3 px-4 text-left">Email</th>
+                  <th class="py-3 px-4 text-left">Status</th>
+                  <th class="py-3 px-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="usersTableBody"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Section -->
+      <div id="reportsSection" class="content-section">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-chart-bar mr-3 text-hindalco-purple"></i>Reports &
+            Analytics
+          </h2>
+          <button
+            onclick="generateReport()"
+            class="bg-hindalco-purple hover:bg-hindalco-purple-dark text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <i class="fas fa-plus"></i>Generate Report
+          </button>
+        </div>
+
+        <!-- Report Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Total Reports</p>
+                <p class="text-3xl font-bold text-hindalco-blue">24</p>
+              </div>
+              <i
+                class="fas fa-file-alt text-4xl text-hindalco-purple opacity-20"
+              ></i>
+            </div>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Generated This Month</p>
+                <p class="text-3xl font-bold text-green-600">8</p>
+              </div>
+              <i
+                class="fas fa-chart-line text-4xl text-green-600 opacity-20"
+              ></i>
+            </div>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Pending Reports</p>
+                <p class="text-3xl font-bold text-yellow-600">3</p>
+              </div>
+              <i class="fas fa-clock text-4xl text-yellow-600 opacity-20"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Search reports..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              />
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Types</option>
+                <option value="usage">Usage Reports</option>
+                <option value="maintenance">Maintenance Reports</option>
+                <option value="inventory">Inventory Reports</option>
+                <option value="financial">Financial Reports</option>
+                <option value="activity">Activity Reports</option>
+              </select>
+              <select
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"
+              >
+                <option value="">All Status</option>
+                <option value="generated">Generated</option>
+                <option value="in-progress">In Progress</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-hindalco-blue text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">Report Name</th>
+                  <th class="py-3 px-4 text-left">Type</th>
+                  <th class="py-3 px-4 text-left">Date Created</th>
+                  <th class="py-3 px-4 text-left">Status</th>
+                  <th class="py-3 px-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="reportsTableBody"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick Report Generation -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+          <h3
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center"
+          >
+            <i class="fas fa-rocket mr-2 text-hindalco-purple"></i>Quick Report
+            Generation
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <button
+              class="bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-4 text-center transition-colors duration-200"
+            >
+              <i class="fas fa-chart-pie text-2xl text-blue-600 mb-2"></i>
+              <p class="font-medium text-blue-800">Usage Analytics</p>
+            </button>
+            <button
+              class="bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg p-4 text-center transition-colors duration-200"
+            >
+              <i class="fas fa-wrench text-2xl text-green-600 mb-2"></i>
+              <p class="font-medium text-green-800">Maintenance Report</p>
+            </button>
+            <button
+              class="bg-yellow-50 hover:bg-yellow-100 border border-yellow-200 rounded-lg p-4 text-center transition-colors duration-200"
+            >
+              <i class="fas fa-boxes text-2xl text-yellow-600 mb-2"></i>
+              <p class="font-medium text-yellow-800">Inventory Status</p>
+            </button>
+            <button
+              class="bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-4 text-center transition-colors duration-200"
+            >
+              <i class="fas fa-dollar-sign text-2xl text-purple-600 mb-2"></i>
+              <p class="font-medium text-purple-800">Cost Analysis</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-hindalco-blue text-white py-6 sm:py-8 lg:py-10 mt-8">
+      <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-15">
+        <div class="text-center mb-8 sm:mb-10">
+          <div class="flex justify-center items-center mb-6">
+            <img
+              src="/Images/logo_Hindalco.jpg"
+              alt="Hindalco Industries Logo"
+              class="h-30 sm:h-24 lg:h-32 w-auto"
+            />
+          </div>
+          <h3
+            class="text-xl sm:text-2xl mb-4 sm:mb-5 font-semibold flex items-center justify-center"
+          >
+            <i class="fas fa-share-alt mr-3"></i>Connect With Us
+          </h3>
+          <div
+            class="flex justify-center gap-3 sm:gap-5 mb-4 sm:mb-5 flex-wrap"
+          >
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-700"
+              title="Facebook"
+            >
+              <i class="fab fa-facebook-f text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-black"
+              title="X (Twitter)"
+            >
+              <i class="fab fa-x-twitter text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-red-600"
+              title="YouTube"
+            >
+              <i class="fab fa-youtube text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-600"
+              title="LinkedIn"
+            >
+              <i class="fab fa-linkedin-in text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"
+              title="Instagram"
+            >
+              <i class="fab fa-instagram text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-red-700"
+              title="Pinterest"
+            >
+              <i class="fab fa-pinterest-p text-white text-lg sm:text-xl"></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-blue-500"
+              title="Telegram"
+            >
+              <i
+                class="fab fa-telegram-plane text-white text-lg sm:text-xl"
+              ></i>
+            </div>
+            <div
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer bg-green-500"
+              title="WhatsApp"
+            >
+              <i class="fab fa-whatsapp text-white text-lg sm:text-xl"></i>
+            </div>
+          </div>
+          <div
+            class="text-center text-sm sm:text-base text-gray-300 mb-8 sm:mb-10"
+          >
+            <p>
+              &copy; 2025 Hindalco Industries Limited. All rights reserved. |
+              Privacy Policy | Terms of Service
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="login.js"></script>
+  </body>
+</html>

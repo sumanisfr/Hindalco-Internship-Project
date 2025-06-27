@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hindalco Tool Tracking - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* Custom Tailwind Configuration (replicated from your index.css) */
+      :root {
+        --hindalco-purple: #6b46c1;
+        --hindalco-purple-dark: #553c9a;
+        --hindalco-gold: #ffd700;
+        --hindalco-blue: #1e3a8a;
+      }
+
+      .text-hindalco-purple {
+        color: var(--hindalco-purple);
+      }
+
+      .text-hindalco-gold {
+        color: var(--hindalco-gold);
+      }
+
+      .bg-hindalco-purple {
+        background-color: var(--hindalco-purple);
+      }
+
+      .bg-hindalco-purple-dark {
+        background-color: var(--hindalco-purple-dark);
+      }
+
+      .bg-hindalco-gold {
+        background-color: var(--hindalco-gold);
+      }
+
+      .bg-hindalco-blue {
+        background-color: var(--hindalco-blue);
+      }
+
+      .border-hindalco-purple {
+        border-color: var(--hindalco-purple);
+      }
+
+      /* Base styles for scrollbar customization */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      /* Specific styles for scrollable elements */
+      .scrollable-content::-webkit-scrollbar {
+        width: 8px;
+        /* Adjust as needed */
+        height: 8px;
+        /* Adjust as needed */
+      }
+
+      .scrollable-content::-webkit-scrollbar-track {
+        background: #e0e0e0;
+        /* Lighter track for content */
+      }
+
+      .scrollable-content::-webkit-scrollbar-thumb {
+        background: #a0a0a0;
+        /* Darker thumb for content */
+      }
+
+      .scrollable-content::-webkit-scrollbar-thumb:hover {
+        background: #707070;
+      }
+    </style>
+
+    <script>
+      // Tailwind CSS Configuration
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "hindalco-purple": "#6B46C1",
+              "hindalco-purple-dark": "#553C9A",
+              "hindalco-gold": "#FFD700",
+              "hindalco-blue": "#1e3a8a",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+
+      // JavaScript for Chart.js and Alpine.js data
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("dashboard", () => ({
+          activeTab: "overview",
+          showAddToolModal: false,
+          showAddUserModal: false,
+          tools: [], // This would ideally be fetched from a backend
+          users: [], // This would ideally be fetched from a backend
+          searchTerm: "",
+          currentPage: 1,
+          itemsPerPage: 10,
+
+          // Example data (replace with real data from your backend)
+          exampleTools: [
+            {
+              id: "T001",
+              name: "Power Drill",
+              status: "Available",
+              location: "Warehouse A",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-05-15",
+            },
+            {
+              id: "T002",
+              name: "Welding Machine",
+              status: "In Use",
+              location: "Workshop 3",
+              assignedTo: "Ramesh Kumar",
+              lastMaintenance: "2024-06-01",
+            },
+            {
+              id: "T003",
+              name: "Angle Grinder",
+              status: "Under Repair",
+              location: "Maintenance Dept.",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-06-20",
+            },
+            {
+              id: "T004",
+              name: "Safety Helmet",
+              status: "Available",
+              location: "Safety Store",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-04-10",
+            },
+            {
+              id: "T005",
+              name: "Torque Wrench",
+              status: "In Use",
+              location: "Assembly Line",
+              assignedTo: "Priya Sharma",
+              lastMaintenance: "2024-05-25",
+            },
+            {
+              id: "T006",
+              name: "Forklift",
+              status: "Available",
+              location: "Yard 1",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-06-18",
+            },
+            {
+              id: "T007",
+              name: "Measuring Tape",
+              status: "Available",
+              location: "Tool Crib",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-03-01",
+            },
+            {
+              id: "T008",
+              name: "Leveling Device",
+              status: "In Use",
+              location: "Site Office",
+              assignedTo: "Amit Singh",
+              lastMaintenance: "2024-06-10",
+            },
+            {
+              id: "T009",
+              name: "Scaffolding Set",
+              status: "Available",
+              location: "Storage Area",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-05-01",
+            },
+            {
+              id: "T010",
+              name: "Impact Driver",
+              status: "In Use",
+              location: "Electric Shop",
+              assignedTo: "Sunita Devi",
+              lastMaintenance: "2024-06-22",
+            },
+            {
+              id: "T011",
+              name: "Hydraulic Jack",
+              status: "Under Repair",
+              location: "Maintenance Dept.",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-06-25",
+            },
+            {
+              id: "T012",
+              name: "Pressure Washer",
+              status: "Available",
+              location: "Cleaning Section",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-04-20",
+            },
+            {
+              id: "T013",
+              name: "Chain Hoist",
+              status: "In Use",
+              location: "Heavy Duty Bay",
+              assignedTo: "Deepak Kumar",
+              lastMaintenance: "2024-06-12",
+            },
+            {
+              id: "T014",
+              name: "Safety Goggles",
+              status: "Available",
+              location: "Safety Store",
+              assignedTo: "N/A",
+              lastMaintenance: "2024-03-15",
+            },
+            {
+              id: "T015",
+              name: "Digital Multimeter",
+              status: "In Use",
+              location: "Electronics Lab",
+              assignedTo: "Preeti Singh",
+              lastMaintenance: "2024-06-05",
+            },
+          ],
+          exampleUsers: [
+            {
+              id: "U001",
+              name: "Rajesh Kumar",
+              email: "rajesh.kumar@hindalco.com",
+              role: "Admin",
+              department: "IT",
+              toolsAssigned: 5,
+            },
+            {
+              id: "U002",
+              name: "Priya Sharma",
+              email: "priya.sharma@hindalco.com",
+              role: "User",
+              department: "Production",
+              toolsAssigned: 3,
+            },
+            {
+              id: "U003",
+              name: "Amit Singh",
+              email: "amit.singh@hindalco.com",
+              role: "User",
+              department: "Maintenance",
+              toolsAssigned: 7,
+            },
+            {
+              id: "U004",
+              name: "Sunita Devi",
+              email: "sunita.devi@hindalco.com",
+              role: "User",
+              department: "Electrical",
+              toolsAssigned: 2,
+            },
+            {
+              id: "U005",
+              name: "Deepak Kumar",
+              email: "deepak.kumar@hindalco.com",
+              role: "User",
+              department: "Logistics",
+              toolsAssigned: 4,
+            },
+            {
+              id: "U006",
+              name: "Neha Gupta",
+              email: "neha.gupta@hindalco.com",
+              role: "User",
+              department: "Safety",
+              toolsAssigned: 1,
+            },
+            {
+              id: "U007",
+              name: "Vikram Reddy",
+              email: "vikram.reddy@hindalco.com",
+              role: "Manager",
+              department: "Operations",
+              toolsAssigned: 0,
+            },
+            {
+              id: "U008",
+              name: "Sonia Prasad",
+              email: "sonia.prasad@hindalco.com",
+              role: "User",
+              department: "Quality Control",
+              toolsAssigned: 2,
+            },
+          ],
+
+          init() {
+            this.tools = this.exampleTools; // Initialize with example data
+            this.users = this.exampleUsers; // Initialize with example data
+
+            this.$nextTick(() => {
+              this.renderCharts();
+            });
+          },
+
+          // Filtering and Pagination for Tools
+          get filteredTools() {
+            return this.tools.filter((tool) =>
+              Object.values(tool).some((val) =>
+                String(val)
+                  .toLowerCase()
+                  .includes(this.searchTerm.toLowerCase())
+              )
+            );
+          },
+          get paginatedTools() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.filteredTools.slice(start, end);
+          },
+          get totalToolPages() {
+            return Math.ceil(this.filteredTools.length / this.itemsPerPage);
+          },
+          nextToolPage() {
+            if (this.currentPage < this.totalToolPages) {
+              this.currentPage++;
+            }
+          },
+          prevToolPage() {
+            if (this.currentPage > 1) {
+              this.currentPage--;
+            }
+          },
+          goToToolPage(page) {
+            this.currentPage = page;
+          },
+
+          // Filtering and Pagination for Users (similar logic)
+          get filteredUsers() {
+            return this.users.filter((user) =>
+              Object.values(user).some((val) =>
+                String(val)
+                  .toLowerCase()
+                  .includes(this.searchTerm.toLowerCase())
+              )
+            );
+          },
+          get paginatedUsers() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.filteredUsers.slice(start, end);
+          },
+          get totalUserPages() {
+            return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+          },
+          nextUserPage() {
+            if (this.currentPage < this.totalUserPages) {
+              this.currentPage++;
+            }
+          },
+          prevUserPage() {
+            if (this.currentPage > 1) {
+              this.currentPage--;
+            }
+          },
+          goToUserPage(page) {
+            this.currentPage = page;
+          },
+
+          openAddToolModal() {
+            this.showAddToolModal = true;
+          },
+          closeAddToolModal() {
+            this.showAddToolModal = false;
+          },
+          openAddUserModal() {
+            this.showAddUserModal = true;
+          },
+          closeAddUserModal() {
+            this.showAddUserModal = false;
+          },
+
+          renderCharts() {
+            // Tool Status Chart
+            const toolStatusCtx = document
+              .getElementById("toolStatusChart")
+              .getContext("2d");
+            new Chart(toolStatusCtx, {
+              type: "doughnut",
+              data: {
+                labels: ["Available", "In Use", "Under Repair"],
+                datasets: [
+                  {
+                    data: [
+                      this.tools.filter((t) => t.status === "Available").length,
+                      this.tools.filter((t) => t.status === "In Use").length,
+                      this.tools.filter((t) => t.status === "Under Repair")
+                        .length,
+                    ],
+                    backgroundColor: [
+                      "#10B981", // Green
+                      "#3B82F6", // Blue
+                      "#EF4444", // Red
+                    ],
+                    hoverOffset: 4,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Tool Status Overview",
+                    font: {
+                      size: 16,
+                      weight: "bold",
+                    },
+                    color: "#333",
+                  },
+                },
+              },
+            });
+
+            // Tools Assigned by Department Chart
+            const departmentData = this.users.reduce((acc, user) => {
+              acc[user.department] =
+                (acc[user.department] || 0) + user.toolsAssigned;
+              return acc;
+            }, {});
+
+            const departmentLabels = Object.keys(departmentData);
+            const departmentToolsCount = Object.values(departmentData);
+
+            const toolsByDeptCtx = document
+              .getElementById("toolsByDeptChart")
+              .getContext("2d");
+            new Chart(toolsByDeptCtx, {
+              type: "bar",
+              data: {
+                labels: departmentLabels,
+                datasets: [
+                  {
+                    label: "Tools Assigned",
+                    data: departmentToolsCount,
+                    backgroundColor: [
+                      "#6B46C1", // hindalco-purple
+                      "#1e3a8a", // hindalco-blue
+                      "#F59E0B", // Amber
+                      "#06B6D4", // Cyan
+                      "#8B5CF6", // Violet
+                    ],
+                    borderColor: [
+                      "#6B46C1",
+                      "#1e3a8a",
+                      "#F59E0B",
+                      "#06B6D4",
+                      "#8B5CF6",
+                    ],
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Tools Assigned by Department",
+                    font: {
+                      size: 16,
+                      weight: "bold",
+                    },
+                    color: "#333",
+                  },
+                  legend: {
+                    display: false, // Hide legend for single dataset
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: "Number of Tools",
+                      color: "#555",
+                    },
+                  },
+                  x: {
+                    title: {
+                      display: true,
+                      text: "Department",
+                      color: "#555",
+                    },
+                  },
+                },
+              },
+            });
+          },
+        }));
+      });
+    </script>
+  </head>
+
+  <body class="font-sans bg-gray-100 text-gray-800" x-data="dashboard">
+    <header
+      class="bg-white shadow-md py-4 px-6 sm:px-10 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <i class="fas fa-tools text-hindalco-purple text-3xl sm:text-4xl"></i>
+        <h1
+          class="text-xl sm:text-2xl font-extrabold text-hindalco-blue tracking-wide"
+        >
+          Tool Tracking Admin Dashboard
+        </h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-700 hidden sm:block"
+          >Welcome, Admin | Hirakud</span
+        >
+        <img
+          src="https://images.pexels.com/photos/3888151/pexels-photo-3888151.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          alt="Hindalco Logo Placeholder"
+          class="h-10 w-10 rounded-full object-cover shadow-md"
+          title="Hindalco Industries Ltd."
+        />
+      </div>
+    </header>
+
+    <div class="flex h-screen overflow-hidden">
+      <aside
+        class="bg-hindalco-blue text-white w-64 p-6 space-y-6 flex flex-col pt-8"
+      >
+        <div class="flex items-center justify-center mb-6">
+          <img
+            src="/Images/logo_Hindalco.jpg"
+            alt="Hindalco Icon"
+            class="h-24 w-28 border-2 border-hindalco-gold object-cover"
+          />
+        </div>
+
+        <nav class="space-y-3 flex-grow">
+          <a
+            @click="activeTab = 'overview'"
+            :class="{'bg-hindalco-purple-dark': activeTab === 'overview'}"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-hindalco-purple-dark cursor-pointer"
+          >
+            <i class="fas fa-tachometer-alt mr-3 text-hindalco-gold"></i>
+            <span>Dashboard Overview</span>
+          </a>
+          <a
+            @click="activeTab = 'tools'"
+            :class="{'bg-hindalco-purple-dark': activeTab === 'tools'}"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-hindalco-purple-dark cursor-pointer"
+          >
+            <i class="fas fa-wrench mr-3 text-hindalco-gold"></i>
+            <span>Tool Inventory</span>
+          </a>
+          <a
+            @click="activeTab = 'users'"
+            :class="{'bg-hindalco-purple-dark': activeTab === 'users'}"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-hindalco-purple-dark cursor-pointer"
+          >
+            <i class="fas fa-users mr-3 text-hindalco-gold"></i>
+            <span>Manage Users</span>
+          </a>
+          <a
+            @click="activeTab = 'reports'"
+            :class="{'bg-hindalco-purple-dark': activeTab === 'reports'}"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-hindalco-purple-dark cursor-pointer"
+          >
+            <i class="fas fa-chart-line mr-3 text-hindalco-gold"></i>
+            <span>Reports & Analytics</span>
+          </a>
+          <a
+            href="#"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-hindalco-purple-dark"
+          >
+            <i class="fas fa-cogs mr-3 text-hindalco-gold"></i>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-gray-700">
+          <a
+            href="./index.html"
+            class="flex items-center p-3 rounded-md transition-colors duration-200 hover:bg-red-600 bg-red-700"
+          >
+            <i class="fas fa-sign-out-alt mr-3 text-white"></i>
+            <span>Log Out</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="flex-1 overflow-y-auto p-8 bg-gray-100 scrollable-content">
+        <div x-show="activeTab === 'overview'" class="space-y-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-tachometer-alt mr-3 text-hindalco-purple"></i>
+            Dashboard Overview
+          </h2>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            <div
+              class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-500 text-sm">Total Tools</p>
+                <p class="text-3xl font-bold text-hindalco-blue">
+                  <span x-text="tools.length"></span>
+                </p>
+              </div>
+              <i class="fas fa-toolbox text-4xl text-hindalco-purple"></i>
+            </div>
+            <div
+              class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-500 text-sm">Tools Available</p>
+                <p class="text-3xl font-bold text-green-600">
+                  <span
+                    x-text="tools.filter(t => t.status === 'Available').length"
+                  ></span>
+                </p>
+              </div>
+              <i class="fas fa-check-circle text-4xl text-green-500"></i>
+            </div>
+            <div
+              class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-500 text-sm">Tools In Use</p>
+                <p class="text-3xl font-bold text-blue-600">
+                  <span
+                    x-text="tools.filter(t => t.status === 'In Use').length"
+                  ></span>
+                </p>
+              </div>
+              <i class="fas fa-people-carry-box text-4xl text-blue-500"></i>
+            </div>
+            <div
+              class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-500 text-sm">Tools Under Repair</p>
+                <p class="text-3xl font-bold text-red-600">
+                  <span
+                    x-text="tools.filter(t => t.status === 'Under Repair').length"
+                  ></span>
+                </p>
+              </div>
+              <i class="fas fa-tools text-4xl text-red-500"></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <canvas id="toolStatusChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <canvas id="toolsByDeptChart"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fas fa-bell mr-3 text-orange-500"></i>Recent Activity &
+              Alerts
+            </h3>
+            <ul class="space-y-3 text-gray-700">
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-green-500 mt-1 mr-3"></i>
+                <div>
+                  <span class="font-medium">T001 (Power Drill)</span> returned
+                  by xyz. (2025-06-27 10:30 AM)
+                </div>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-blue-500 mt-1 mr-3"></i>
+                <div>
+                  <span class="font-medium">T005 (Torque Wrench)</span> assigned
+                  to abc. (2025-06-27 09:15 AM)
+                </div>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-red-500 mt-1 mr-3"></i>
+                <div>
+                  <span class="font-medium">T003 (Angle Grinder)</span> moved to
+                  'Under Repair'. (2025-06-26 04:00 PM)
+                </div>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-orange-500 mt-1 mr-3"></i>
+                <div>
+                  Low stock alert for
+                  <span class="font-medium">Safety Gloves</span>. Order more.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div x-show="activeTab === 'tools'" class="space-y-6">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-wrench mr-3 text-hindalco-purple"></i>Tool
+            Inventory
+          </h2>
+
+          <div
+            class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
+          >
+            <div class="relative w-full sm:w-1/3">
+              <input
+                type="text"
+                x-model="searchTerm"
+                placeholder="Search tools..."
+                class="w-full py-2 pl-10 pr-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+            <button
+              @click="openAddToolModal"
+              class="bg-hindalco-purple text-white py-2 px-5 rounded-md hover:bg-hindalco-purple-dark transition-colors duration-200 flex items-center"
+            >
+              <i class="fas fa-plus mr-2"></i>Add New Tool
+            </button>
+          </div>
+
+          <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Tool ID
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Location
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Assigned To
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Last Maint.
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <template x-for="tool in paginatedTools" :key="tool.id">
+                  <tr>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                      x-text="tool.id"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="tool.name"
+                    ></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      <span
+                        :class="{
+                                'bg-green-100 text-green-800': tool.status === 'Available',
+                                'bg-blue-100 text-blue-800': tool.status === 'In Use',
+                                'bg-red-100 text-red-800': tool.status === 'Under Repair'
+                              }"
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                        x-text="tool.status"
+                      ></span>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="tool.location"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="tool.assignedTo"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="tool.lastMaintenance"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <a
+                        href="#"
+                        class="text-hindalco-purple hover:text-hindalco-purple-dark mr-3"
+                        title="Edit"
+                        ><i class="fas fa-edit"></i
+                      ></a>
+                      <a
+                        href="#"
+                        class="text-red-600 hover:text-red-800"
+                        title="Delete"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </template>
+                <template x-if="paginatedTools.length === 0">
+                  <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                      No tools found.
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+
+          <nav
+            class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 shadow-md rounded-md"
+            aria-label="Pagination"
+          >
+            <div class="hidden sm:block">
+              <p class="text-sm text-gray-700">
+                Showing
+                <span
+                  class="font-medium"
+                  x-text="(currentPage - 1) * itemsPerPage + 1"
+                ></span>
+                to
+                <span
+                  class="font-medium"
+                  x-text="Math.min(currentPage * itemsPerPage, filteredTools.length)"
+                ></span>
+                of
+                <span class="font-medium" x-text="filteredTools.length"></span>
+                results
+              </p>
+            </div>
+            <div class="flex flex-1 justify-between sm:justify-end gap-2">
+              <button
+                @click="prevToolPage()"
+                :disabled="currentPage === 1"
+                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              <button
+                @click="nextToolPage()"
+                :disabled="currentPage === totalToolPages"
+                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </nav>
+        </div>
+
+        <div x-show="activeTab === 'users'" class="space-y-6">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-users mr-3 text-hindalco-purple"></i>Manage Users
+          </h2>
+
+          <div
+            class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
+          >
+            <div class="relative w-full sm:w-1/3">
+              <input
+                type="text"
+                x-model="searchTerm"
+                placeholder="Search users..."
+                class="w-full py-2 pl-10 pr-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+            <button
+              @click="openAddUserModal"
+              class="bg-hindalco-purple text-white py-2 px-5 rounded-md hover:bg-hindalco-purple-dark transition-colors duration-200 flex items-center"
+            >
+              <i class="fas fa-user-plus mr-2"></i>Add New User
+            </button>
+          </div>
+
+          <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    User ID
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Email
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Role
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Department
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Tools Assigned
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <template x-for="user in paginatedUsers" :key="user.id">
+                  <tr>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                      x-text="user.id"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="user.name"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="user.email"
+                    ></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      <span
+                        :class="{
+                                'bg-purple-100 text-purple-800': user.role === 'Admin',
+                                'bg-gray-100 text-gray-800': user.role === 'User',
+                                'bg-orange-100 text-orange-800': user.role === 'Manager'
+                              }"
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                        x-text="user.role"
+                      ></span>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="user.department"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                      x-text="user.toolsAssigned"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <a
+                        href="#"
+                        class="text-hindalco-purple hover:text-hindalco-purple-dark mr-3"
+                        title="Edit"
+                        ><i class="fas fa-edit"></i
+                      ></a>
+                      <a
+                        href="#"
+                        class="text-red-600 hover:text-red-800"
+                        title="Delete"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </template>
+                <template x-if="paginatedUsers.length === 0">
+                  <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                      No users found.
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+
+          <nav
+            class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 shadow-md rounded-md"
+            aria-label="Pagination"
+          >
+            <div class="hidden sm:block">
+              <p class="text-sm text-gray-700">
+                Showing
+                <span
+                  class="font-medium"
+                  x-text="(currentPage - 1) * itemsPerPage + 1"
+                ></span>
+                to
+                <span
+                  class="font-medium"
+                  x-text="Math.min(currentPage * itemsPerPage, filteredUsers.length)"
+                ></span>
+                of
+                <span class="font-medium" x-text="filteredUsers.length"></span>
+                results
+              </p>
+            </div>
+            <div class="flex flex-1 justify-between sm:justify-end gap-2">
+              <button
+                @click="prevUserPage()"
+                :disabled="currentPage === 1"
+                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              <button
+                @click="nextUserPage()"
+                :disabled="currentPage === totalUserPages"
+                class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </nav>
+        </div>
+
+        <div x-show="activeTab === 'reports'" class="space-y-6">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-chart-line mr-3 text-hindalco-purple"></i>Reports &
+            Analytics
+          </h2>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+          >
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fas fa-calendar-alt mr-3 text-blue-500"></i>Tool Usage
+                Trends
+              </h3>
+              <p class="text-gray-700">
+                Visualize tool usage over time to identify peak periods and
+                popular tools.
+              </p>
+              <button
+                class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200"
+              >
+                View Report
+              </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fas fa-file-invoice mr-3 text-green-500"></i
+                >Maintenance History Report
+              </h3>
+              <p class="text-gray-700">
+                Access detailed records of all tool maintenance activities.
+              </p>
+              <button
+                class="mt-4 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200"
+              >
+                View Report
+              </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fas fa-exclamation-triangle mr-3 text-red-500"></i
+                >Defective Tools Log
+              </h3>
+              <p class="text-gray-700">
+                Track and manage tools marked as defective or irreparable.
+              </p>
+              <button
+                class="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-200"
+              >
+                View Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div
+      x-show="showAddToolModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      x-cloak
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="opacity-0 scale-95"
+      x-transition:enter-end="opacity-100 scale-100"
+      x-transition:leave="ease-in duration-200"
+      x-transition:leave-start="opacity-100 scale-100"
+      x-transition:leave-end="opacity-0 scale-95"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md mx-auto"
+        @click.away="closeAddToolModal"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-gray-800">Add New Tool</h3>
+          <button
+            type="button"
+            @click="closeAddToolModal"
+            class="text-gray-500 hover:text-gray-700"
+            title="Close modal"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <form
+          @submit.prevent="alert('Tool Added! (Functionality to be implemented)')"
+        >
+          <div class="mb-4">
+            <label
+              for="toolName"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Tool Name</label
+            >
+            <input
+              type="text"
+              id="toolName"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="toolID"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Tool ID</label
+            >
+            <input
+              type="text"
+              id="toolID"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="toolStatus"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Status</label
+            >
+            <select
+              id="toolStatus"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+            >
+              <option value="Available">Available</option>
+              <option value="In Use">In Use</option>
+              <option value="Under Repair">Under Repair</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label
+              for="toolLocation"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Location</label
+            >
+            <input
+              type="text"
+              id="toolLocation"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              required
+            />
+          </div>
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              @click="closeAddToolModal"
+              class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="bg-hindalco-purple text-white py-2 px-4 rounded-md hover:bg-hindalco-purple-dark transition-colors duration-200"
+            >
+              Add Tool
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      x-show="showAddUserModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      x-cloak
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="opacity-0 scale-95"
+      x-transition:enter-end="opacity-100 scale-100"
+      x-transition:leave="ease-in duration-200"
+      x-transition:leave-start="opacity-100 scale-100"
+      x-transition:leave-end="opacity-0 scale-95"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md mx-auto"
+        @click.away="closeAddUserModal"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-gray-800">Add New User</h3>
+          <button
+            type="button"
+            @click="closeAddUserModal"
+            class="text-gray-500 hover:text-gray-700"
+            title="Close modal"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <form
+          @submit.prevent="alert('User Added! (Functionality to be implemented)')"
+        >
+          <div class="mb-4">
+            <label
+              for="userName"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >User Name</label
+            >
+            <input
+              type="text"
+              id="userName"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="userEmail"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="userEmail"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              placeholder="user@hindalco.com"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="userRole"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Role</label
+            >
+            <select
+              id="userRole"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+            >
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label
+              for="userDepartment"
+              class="block text-gray-700 text-sm font-semibold mb-2"
+              >Department</label
+            >
+            <input
+              type="text"
+              id="userDepartment"
+              class="w-full border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hindalco-purple"
+              required
+            />
+          </div>
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              @click="closeAddUserModal"
+              class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="bg-hindalco-purple text-white py-2 px-4 rounded-md hover:bg-hindalco-purple-dark transition-colors duration-200"
+            >
+              Add User
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="login.js"></script>
+  </body>
+</html>
