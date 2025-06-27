@@ -35,6 +35,7 @@ const userCredentials = {
     redirect: "user.html",
     role: "User",
   },
+  // for manager
   "manager@hindalco.com": {
     password: "password",
     redirect: "manager.html",
