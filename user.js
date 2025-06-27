@@ -6,7 +6,7 @@ function showSection(id) {
 
 function logout() {
   alert("Logged out");
-  window.location.href = "login.html"; // Simulate redirection after logout
+  window.location.href = "index.html"; // Simulate redirection after logout
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Smooth scroll for anchor links
-const anchorLinks = document.querySelectorAll('a[href^="./login/index"]');
+const anchorLinks = document.querySelectorAll('a[href^="./index/index"]');
 anchorLinks.forEach((link) => {
   link.addEventListener("click", function (e) {
     e.preventDefault();
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (logoutButton) {
     logoutButton.addEventListener("click", function () {
       alert("You have been logged out.");
-      window.location.href = "login.html"; // Redirect to login page
+      window.location.href = "index.html"; // Redirect to login page
     });
   }
 
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Simulate login
       if (email === "user@example.com" && password === "password123") {
         alert("Login successful!");
-        window.location.href = "login.html"; // Redirect to dashboard
+        window.location.href = "index.html"; // Redirect to dashboard
       } else {
         alert("Invalid email or password.");
       }
