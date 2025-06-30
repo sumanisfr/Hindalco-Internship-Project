@@ -79,7 +79,6 @@
 </head>
 
 <body class="font-sans min-h-screen overflow-x-hidden">
-  <!-- Header -->
   <header class="glass-header shadow-lg py-4 px-6 sm:px-10 flex items-center justify-between sticky top-0 z-50">
     <div class="flex items-center gap-4">
       <div class="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full">
@@ -138,20 +137,19 @@
   </header>
 
   <main class="container mx-auto mt-8 p-4 space-y-8">
-    <!-- Dashboard Overview -->
     <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-3xl font-bold text-white mb-4 flex items-center">
         <i class="fas fa-gauge-high mr-3 text-yellow-300"></i>Dashboard Overview
       </h2>
       <p class="text-gray-200 text-lg mb-6">
-        Welcome back, John! Here's your tool tracking status at a glance.
+        Welcome back, Here's your tool tracking status at a glance.
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white card-hover">
           <div class="flex items-center justify-between mb-4">
             <i class="fas fa-toolbox text-5xl opacity-75"></i>
-            <span class="text-6xl font-bold animate-pulse-slow">125</span>
+            <span class="text-6xl font-bold animate-pulse-slow" id="totalTools">125</span>
           </div>
           <p class="text-xl font-medium">Total Tools</p>
         </div>
@@ -159,7 +157,7 @@
         <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white card-hover">
           <div class="flex items-center justify-between mb-4">
             <i class="fas fa-check-circle text-5xl opacity-75"></i>
-            <span class="text-6xl font-bold animate-pulse-slow">98</span>
+            <span class="text-6xl font-bold animate-pulse-slow" id="availableTools">98</span>
           </div>
           <p class="text-xl font-medium">Available</p>
         </div>
@@ -167,35 +165,34 @@
         <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg text-white card-hover">
           <div class="flex items-center justify-between mb-4">
             <i class="fas fa-handshake text-5xl opacity-75"></i>
-            <span class="text-6xl font-bold animate-pulse-slow">27</span>
+            <span class="text-6xl font-bold animate-pulse-slow" id="inUseTools">27</span>
           </div>
           <p class="text-xl font-medium">In Use</p>
         </div>
       </div>
     </section>
 
-    <!-- Quick Actions -->
     <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
         <i class="fas fa-bolt mr-3 text-yellow-300"></i>Quick Actions
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button
+        <button id="addToolBtn"
           class="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:scale-105 shadow-lg">
           <i class="fas fa-plus-circle mr-3 text-xl"></i>
           <span class="font-medium">Add Tool</span>
         </button>
-        <button
+        <button id="issueReturnBtn"
           class="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-green-600 hover:to-green-700 hover:scale-105 shadow-lg">
           <i class="fas fa-exchange-alt mr-3 text-xl"></i>
           <span class="font-medium">Issue/Return</span>
         </button>
-        <button
+        <button id="generateReportBtn"
           class="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-purple-600 hover:to-purple-700 hover:scale-105 shadow-lg">
           <i class="fas fa-file-export mr-3 text-xl"></i>
           <span class="font-medium">Generate Report</span>
         </button>
-        <button
+        <button id="searchToolsBtn"
           class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-yellow-600 hover:to-yellow-700 hover:scale-105 shadow-lg">
           <i class="fas fa-search mr-3 text-xl"></i>
           <span class="font-medium">Search Tools</span>
@@ -203,7 +200,6 @@
       </div>
     </section>
 
-    <!-- Recent Tool Activity -->
     <section id="tools" class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
         <i class="fas fa-clock-rotate-left mr-3 text-yellow-300"></i>Recent Tool Activity
@@ -227,11 +223,11 @@
               <td class="py-4 px-6">Warehouse A, Shelf 3</td>
               <td class="py-4 px-6 text-center space-x-2">
                 <button
-                  class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
+                  class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
                 <button
-                  class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
+                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
                 <button
-                  class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
               </td>
             </tr>
             <tr class="border-b border-white/10 hover:bg-white/10 transition-colors">
@@ -242,11 +238,11 @@
               <td class="py-4 px-6">Section B, Team 2</td>
               <td class="py-4 px-6 text-center space-x-2">
                 <button
-                  class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
+                  class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
                 <button
-                  class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
+                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
                 <button
-                  class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
               </td>
             </tr>
             <tr class="border-b border-white/10 hover:bg-white/10 transition-colors">
@@ -257,11 +253,11 @@
               <td class="py-4 px-6">Tool Room C</td>
               <td class="py-4 px-6 text-center space-x-2">
                 <button
-                  class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
+                  class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
                 <button
-                  class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
+                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
                 <button
-                  class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
               </td>
             </tr>
           </tbody>
@@ -275,7 +271,6 @@
       </div>
     </section>
 
-    <!-- Add New Tool -->
     <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
         <i class="fas fa-plus-square mr-3 text-yellow-300"></i>Add New Tool
@@ -304,16 +299,15 @@
             class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
             required />
         </div>
-        <div class="col-span-1 md:col-span-2 text-right"></div>
-        <button type="submit"
-          class="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-8 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-semibold shadow-lg hover:scale-105">
-          <i class="fas fa-save mr-2"></i>Save Tool
-        </button>
+        <div class="col-span-1 md:col-span-2 text-right">
+          <button type="submit"
+            class="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-8 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-semibold shadow-lg hover:scale-105">
+            <i class="fas fa-save mr-2"></i>Save Tool
+          </button>
         </div>
       </form>
     </section>
 
-    <!-- Reports & Analytics -->
     <section id="reports" class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
         <i class="fas fa-chart-pie mr-3 text-yellow-300"></i>Reports & Analytics
@@ -333,21 +327,21 @@
           </div>
         </div>
 
-        <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/20"></div>
-        <h3 class="font-semibold text-xl mb-3 text-white">Usage Trends (30 Days)</h3>
-        <p class="text-sm text-gray-300 mb-4">Identify frequently used tools.</p>
-        <div
-          class="h-48 bg-gradient-to-br from-green-400/20 to-blue-400/20 flex items-center justify-center text-white rounded-lg border border-white/10">
-          <div class="text-center">
-            <i class="fas fa-chart-line text-4xl mb-2 opacity-50"></i>
-            <p>Line Chart Placeholder</p>
+        <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/20">
+          <h3 class="font-semibold text-xl mb-3 text-white">Usage Trends (30 Days)</h3>
+          <p class="text-sm text-gray-300 mb-4">Identify frequently used tools.</p>
+          <div
+            class="h-48 bg-gradient-to-br from-green-400/20 to-blue-400/20 flex items-center justify-center text-white rounded-lg border border-white/10">
+            <div class="text-center">
+              <i class="fas fa-chart-line text-4xl mb-2 opacity-50"></i>
+              <p>Line Chart Placeholder</p>
+            </div>
           </div>
         </div>
       </div>
-      </div>
 
       <div class="text-right mt-6">
-        <button
+        <button id="downloadReportBtn"
           class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-8 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-semibold shadow-lg hover:scale-105">
           <i class="fas fa-download mr-2"></i>Download Full Report
         </button>
@@ -355,7 +349,6 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 mt-12">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-10">
@@ -437,6 +430,203 @@
   </footer>
 
   <script src="login.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get DOM elements
+      const addToolForm = document.getElementById("addToolForm");
+      const toolTableBody = document.getElementById("toolTableBody");
+      const logoutButton = document.getElementById("logoutButton");
+
+      const totalToolsSpan = document.getElementById("totalTools");
+      const availableToolsSpan = document.getElementById("availableTools");
+      const inUseToolsSpan = document.getElementById("inUseTools");
+
+      const addToolQuickBtn = document.getElementById("addToolBtn");
+      const issueReturnBtn = document.getElementById("issueReturnBtn");
+      const generateReportBtn = document.getElementById("generateReportBtn");
+      const searchToolsBtn = document.getElementById("searchToolsBtn");
+      const downloadReportBtn = document.getElementById("downloadReportBtn");
+
+      let totalTools = parseInt(totalToolsSpan.textContent);
+      let availableTools = parseInt(availableToolsSpan.textContent);
+      let inUseTools = parseInt(inUseToolsSpan.textContent);
+
+      // Function to update dashboard overview numbers
+      function updateDashboardNumbers() {
+        totalToolsSpan.textContent = totalTools;
+        availableToolsSpan.textContent = availableTools;
+        inUseToolsSpan.textContent = inUseTools;
+      }
+
+      // Add Tool Form Submission
+      if (addToolForm) {
+        addToolForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const toolName = document.getElementById("toolName").value;
+          const toolStatus = document.getElementById("toolStatus").value;
+          const toolLocation = document.getElementById("toolLocation").value;
+
+          if (toolName && toolStatus && toolLocation) {
+            const newRow = document.createElement("tr");
+            newRow.className = "border-b border-white/10 hover:bg-white/10 transition-colors";
+
+            let statusColorClass = '';
+            if (toolStatus === 'Available') {
+              statusColorClass = 'bg-green-500';
+              availableTools++;
+            } else if (toolStatus === 'Issued' || toolStatus === 'In Use') {
+              statusColorClass = 'bg-red-500';
+              inUseTools++;
+            } else {
+              statusColorClass = 'bg-gray-500'; // For 'Under Maintenance' or 'Lost'
+            }
+            totalTools++; // Increment total tools for any new addition
+
+            newRow.innerHTML = `
+              <td class="py-4 px-6 font-medium">${toolName}</td>
+              <td class="py-4 px-6">
+                <span class="px-3 py-1 rounded-full ${statusColorClass} text-white text-xs font-semibold">${toolStatus}</span>
+              </td>
+              <td class="py-4 px-6">${toolLocation}</td>
+              <td class="py-4 px-6 text-center space-x-2">
+                <button class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
+                <button class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
+                <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+              </td>
+            `;
+            toolTableBody.appendChild(newRow);
+
+            // Clear form fields
+            document.getElementById("toolName").value = "";
+            document.getElementById("toolStatus").value = "Available";
+            document.getElementById("toolLocation").value = "";
+
+            alert("Tool added successfully!");
+            updateDashboardNumbers(); // Update the displayed numbers
+            attachTableButtonListeners(); // Re-attach listeners for new rows
+          } else {
+            alert("Please fill in all tool details.");
+          }
+        });
+      }
+
+      // Function to attach listeners to table action buttons
+      function attachTableButtonListeners() {
+        // Remove existing listeners to prevent duplicates
+        const oldViewButtons = document.querySelectorAll(".view-btn");
+        const oldEditButtons = document.querySelectorAll(".edit-btn");
+        const oldDeleteButtons = document.querySelectorAll(".delete-btn");
+
+        oldViewButtons.forEach(button => button.removeEventListener('click', handleViewClick));
+        oldEditButtons.forEach(button => button.removeEventListener('click', handleEditClick));
+        oldDeleteButtons.forEach(button => button.removeEventListener('click', handleDeleteClick));
+
+        // Attach new listeners
+        const viewButtons = document.querySelectorAll(".view-btn");
+        const editButtons = document.querySelectorAll(".edit-btn");
+        const deleteButtons = document.querySelectorAll(".delete-btn");
+
+        viewButtons.forEach((button) => {
+          button.addEventListener("click", handleViewClick);
+        });
+
+        editButtons.forEach((button) => {
+          button.addEventListener("click", handleEditClick);
+        });
+
+        deleteButtons.forEach((button) => {
+          button.addEventListener("click", handleDeleteClick);
+        });
+      }
+
+      // Handlers for table buttons
+      function handleViewClick(event) {
+        const row = event.target.closest("tr");
+        const toolName = row.children[0].textContent;
+        alert(`Viewing details for: ${toolName}`);
+        // In a real application, you'd open a modal or navigate to a detail page
+      }
+
+      function handleEditClick(event) {
+        const row = event.target.closest("tr");
+        const toolName = row.children[0].textContent;
+        alert(`Editing: ${toolName}`);
+        // In a real application, you'd populate a form for editing
+      }
+
+      function handleDeleteClick(event) {
+        const row = event.target.closest("tr");
+        const toolName = row.children[0].textContent;
+        if (confirm(`Are you sure you want to delete "${toolName}"?`)) {
+          const status = row.children[1].querySelector('span').textContent;
+          if (status === 'Available') {
+            availableTools--;
+          } else if (status === 'In Use') {
+            inUseTools--;
+          }
+          totalTools--;
+          row.remove();
+          updateDashboardNumbers();
+          alert(`${toolName} deleted.`);
+        }
+      }
+
+      // Initial attachment of listeners for existing table rows
+      attachTableButtonListeners();
+
+      // Logout Button
+      if (logoutButton) {
+        logoutButton.addEventListener("click", function () {
+          logout(); // This `logout` function is assumed to be in login.js
+        });
+      }
+
+      // Quick Actions Buttons
+      if (addToolQuickBtn) {
+        addToolQuickBtn.addEventListener("click", function () {
+          alert("Initiating 'Add Tool' process. Scroll down to the 'Add New Tool' section!");
+          document.getElementById('addToolForm').scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      if (issueReturnBtn) {
+        issueReturnBtn.addEventListener("click", function () {
+          alert("Opening 'Issue/Return Tool' interface...");
+          // In a real app, this would open a specific modal or page
+        });
+      }
+
+      if (generateReportBtn) {
+        generateReportBtn.addEventListener("click", function () {
+          alert("Generating quick report...");
+          document.getElementById('reports').scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      if (searchToolsBtn) {
+        searchToolsBtn.addEventListener("click", function () {
+          alert("Opening 'Search Tools' interface...");
+          // In a real app, this would open a search modal or navigate to a search page
+        });
+      }
+
+      if (downloadReportBtn) {
+        downloadReportBtn.addEventListener("click", function () {
+          alert("Downloading full report...");
+          // In a real application, this would trigger a file download
+        });
+      }
+
+      // Ensure the checkAuthentication is called when the page loads
+      // Assuming checkAuthentication is defined in login.js and is globally accessible
+      if (typeof checkAuthentication === 'function') {
+        checkAuthentication("User"); // Or the appropriate role for this page
+      } else {
+        console.warn("checkAuthentication function not found. User authentication might not be enforced.");
+      }
+    });
+  </script>
 </body>
 
 </html>
