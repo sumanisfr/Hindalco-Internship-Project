@@ -28,37 +28,15 @@ tailwind.config = {
   },
 };
 
-// User credentials and their respective redirect pages
-const userCredentials = {
-  "user@hindalco.com": {
-    password: "password",
-    redirect: "user.html",
-    role: "User",
-  },
-  // for manager
-  "manager@hindalco.com": {
-    password: "password",
-    redirect: "manager.html",
-    role: "Manager",
-  },
-  "admin@hindalco.com": {
-    password: "password",
-    redirect: "admin.html",
-    role: "Admin",
-  },
+// Role-based redirect mapping
+const roleRedirects = {
+  'Employee': 'user.html',
+  'Manager': 'manager.html',
+  'Admin': 'admin.html'
 };
 
-// Authentication function
-function authenticateUser(email, password) {
-  const user = userCredentials[email];
-  if (user && user.password === password) {
-    return user;
-  }
-  return null;
-}
-
-// Universal login handler function
-function handleLogin() {
+// Universal login handler function using backend API
+async function handleLogin() {
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
 
@@ -75,27 +53,61 @@ function handleLogin() {
     return;
   }
 
-  // Authenticate user
-  const authenticatedUser = authenticateUser(email, password);
+  try {
+    // Show loading state
+    const loginButton = document.querySelector('button[type="submit"]');
+    if (loginButton) {
+      loginButton.disabled = true;
+      loginButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Signing In...';
+    }
 
-  if (authenticatedUser) {
-    alert(`Login successful! Welcome, ${authenticatedUser.role}.`);
+    // Check if backend is running
+    await apiService.healthCheck();
 
-    // Store user session (using sessionStorage instead of localStorage for security)
-    sessionStorage.setItem(
-      "currentUser",
-      JSON.stringify({
-        email: email,
-        role: authenticatedUser.role,
-      })
-    );
+    // Authenticate user with backend
+    const response = await apiService.login(email, password);
+    
+    if (response.token && response.user) {
+      // Store authentication data
+      localStorage.setItem('token', response.token);
+      sessionStorage.setItem('currentUser', JSON.stringify({
+        email: response.user.email,
+        role: response.user.role,
+        id: response.user._id || response.user.id,
+        name: response.user.fullName || `${response.user.firstName || ''} ${response.user.lastName || ''}`.trim() || response.user.email,
+        firstName: response.user.firstName,
+        lastName: response.user.lastName
+      }));
 
-    // Redirect to appropriate page
-    window.location.href = authenticatedUser.redirect;
-  } else {
-    alert("Invalid email or password. Please try again.");
-    // Clear the password field for security
+      alert(`Login successful! Welcome, ${response.user.role}.`);
+
+      // Redirect based on role
+      const redirectPage = roleRedirects[response.user.role] || 'user.html';
+      window.location.href = redirectPage;
+    } else {
+      throw new Error('Invalid response from server');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    
+    // Handle specific error cases
+    if (error.message.includes('Backend server is not running')) {
+      alert('Cannot connect to server. Please ensure the backend is running on port 5000.');
+    } else if (error.message.includes('401') || error.message.includes('Invalid')) {
+      alert('Invalid email or password. Please try again.');
+    } else {
+      alert(`Login failed: ${error.message}`);
+    }
+    
+    // Clear password field for security
     passwordInput.value = "";
+  } finally {
+    // Reset button state
+    const loginButton = document.querySelector('button[type="submit"]');
+    if (loginButton) {
+      loginButton.disabled = false;
+      loginButton.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Sign In';
+    }
   }
 }
 
@@ -285,6 +297,20 @@ function checkAuthentication(requiredRole = null) {
     window.location.href = "index.html";
     return false;
   }
+
+  // Update user display if element exists
+  const userNameDisplay = document.getElementById("userNameDisplay");
+  if (userNameDisplay) {
+    userNameDisplay.textContent = user.name || user.email;
+  }
+
+  // Also try alternative selectors for different pages
+  const userDisplayElements = document.querySelectorAll('[id*="userName"], [id*="userDisplay"]');
+  userDisplayElements.forEach(element => {
+    if (element.textContent.includes('Name') || element.textContent.includes('User')) {
+      element.textContent = user.name || user.email;
+    }
+  });
 
   return true;
 }

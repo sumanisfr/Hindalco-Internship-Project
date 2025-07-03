@@ -432,6 +432,7 @@
     </div>
   </footer>
 
+  <script src="api.js"></script>
   <script src="login.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -624,7 +625,7 @@
       // Ensure the checkAuthentication is called when the page loads
       // Assuming checkAuthentication is defined in login.js and is globally accessible
       if (typeof checkAuthentication === 'function') {
-        checkAuthentication("User"); // Or the appropriate role for this page
+        checkAuthentication("Employee"); // Fixed to match backend role
       } else {
         console.warn("checkAuthentication function not found. User authentication might not be enforced.");
       }

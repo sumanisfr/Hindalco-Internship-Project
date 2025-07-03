@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Connection Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">
+            <i class="fas fa-network-wired mr-2 text-blue-600"></i>
+            Backend Connection Test
+        </h1>
+        
+        <div class="space-y-4">
+            <button id="testConnection" 
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center">
+                <i class="fas fa-play mr-2"></i>
+                Test Connection
+            </button>
+            
+            <div id="results" class="hidden">
+                <h3 class="font-semibold text-gray-800 mb-2">Results:</h3>
+                <div id="output" class="bg-gray-100 p-4 rounded border min-h-[100px] text-sm font-mono"></div>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Back to Login
+            </a>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testButton = document.getElementById('testConnection');
+            const resultsDiv = document.getElementById('results');
+            const outputDiv = document.getElementById('output');
+
+            testButton.addEventListener('click', async function() {
+                testButton.disabled = true;
+                testButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+                
+                resultsDiv.classList.remove('hidden');
+                outputDiv.innerHTML = 'Running connection tests...\n\n';
+
+                try {
+                    // Test 1: Backend Health Check
+                    outputDiv.innerHTML += '🔍 Testing backend health check...\n';
+                    const healthResponse = await apiService.healthCheck();
+                    outputDiv.innerHTML += `✅ Backend is running: ${healthResponse.message}\n\n`;
+
+                    // Test 2: Test CORS
+                    outputDiv.innerHTML += '🔍 Testing CORS configuration...\n';
+                    const corsResponse = await fetch('http://localhost:5000/api/tools');
+                    if (corsResponse.status === 200 || corsResponse.status === 401) {
+                        outputDiv.innerHTML += '✅ CORS is properly configured\n\n';
+                    } else {
+                        outputDiv.innerHTML += `⚠️ CORS might have issues (Status: ${corsResponse.status})\n\n`;
+                    }
+
+                    // Test 3: Test API endpoints
+                    outputDiv.innerHTML += '🔍 Testing API endpoints...\n';
+                    try {
+                        await apiService.getAllTools();
+                        outputDiv.innerHTML += '✅ Tools endpoint is accessible\n';
+                    } catch (error) {
+                        if (error.message.includes('401')) {
+                            outputDiv.innerHTML += '✅ Tools endpoint is protected (401 - requires auth)\n';
+                        } else {
+                            outputDiv.innerHTML += `❌ Tools endpoint error: ${error.message}\n`;
+                        }
+                    }
+
+                    try {
+                        await apiService.getAllUsers();
+                        outputDiv.innerHTML += '✅ Users endpoint is accessible\n';
+                    } catch (error) {
+                        if (error.message.includes('401')) {
+                            outputDiv.innerHTML += '✅ Users endpoint is protected (401 - requires auth)\n';
+                        } else {
+                            outputDiv.innerHTML += `❌ Users endpoint error: ${error.message}\n`;
+                        }
+                    }
+
+                    outputDiv.innerHTML += '\n🎉 Connection test completed! Your frontend and backend are properly connected.\n';
+                    outputDiv.innerHTML += '\n📋 Next steps:\n';
+                    outputDiv.innerHTML += '1. Try logging in with valid credentials\n';
+                    outputDiv.innerHTML += '2. Register a new user if needed\n';
+                    outputDiv.innerHTML += '3. Test all app functionality\n';
+
+                } catch (error) {
+                    outputDiv.innerHTML += `❌ Connection failed: ${error.message}\n\n`;
+                    outputDiv.innerHTML += '🔧 Troubleshooting:\n';
+                    outputDiv.innerHTML += '1. Ensure backend server is running on port 5000\n';
+                    outputDiv.innerHTML += '2. Check if MongoDB is connected\n';
+                    outputDiv.innerHTML += '3. Verify CORS settings in backend\n';
+                    outputDiv.innerHTML += '4. Check browser console for errors\n';
+                } finally {
+                    testButton.disabled = false;
+                    testButton.innerHTML = '<i class="fas fa-play mr-2"></i>Test Connection';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

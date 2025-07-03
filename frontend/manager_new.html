@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - Hindalco Tool Tracking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+    <style>
+        .hindalco-purple { color: #6B46C1; }
+        .hindalco-purple-dark { color: #553C9A; }
+        .hindalco-gold { color: #FFD700; }
+        .hindalco-blue { color: #1e3a8a; }
+        .bg-hindalco-purple { background-color: #6B46C1; }
+        .bg-hindalco-purple-dark { background-color: #553C9A; }
+        .bg-hindalco-blue { background-color: #1e3a8a; }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .badge-notification {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen">
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-lg py-4 px-6 sticky top-0 z-40">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-4">
+                <div class="p-2 bg-hindalco-blue rounded-full">
+                    <i class="fas fa-user-tie text-white text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">Manager Dashboard</h1>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="#dashboard" class="text-gray-700 hover:text-hindalco-purple transition-colors">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </a>
+                <a href="#requests" class="text-gray-700 hover:text-hindalco-purple transition-colors relative">
+                    <i class="fas fa-clipboard-list mr-2"></i>Pending Requests
+                    <span id="pendingBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </a>
+                <a href="#tools" class="text-gray-700 hover:text-hindalco-purple transition-colors">
+                    <i class="fas fa-tools mr-2"></i>Tool Management
+                </a>
+                <a href="#users" class="text-gray-700 hover:text-hindalco-purple transition-colors">
+                    <i class="fas fa-users mr-2"></i>Users
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <button id="userMenuBtn" class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-hindalco-blue rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <span id="userNameDisplay" class="text-gray-700 font-medium">Manager</span>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </button>
+                    
+                    <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 hidden">
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-user-circle mr-2"></i>Profile
+                        </a>
+                        <a href="#settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </a>
+                        <hr class="my-1">
+                        <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6 space-y-6">
+        <!-- Quick Actions Panel -->
+        <section class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-bolt mr-3 text-hindalco-purple"></i>Quick Actions
+            </h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="openAssignToolModal()" class="p-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-center transition-colors duration-200">
+                    <i class="fas fa-hand-holding text-2xl text-blue-600 mb-2"></i>
+                    <p class="font-medium text-blue-800 text-sm">Assign Tool</p>
+                </button>
+                
+                <button onclick="openMaintenanceModal()" class="p-4 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-center transition-colors duration-200">
+                    <i class="fas fa-calendar-alt text-2xl text-orange-600 mb-2"></i>
+                    <p class="font-medium text-orange-800 text-sm">Schedule Maintenance</p>
+                </button>
+                
+                <button onclick="showExportOptions()" class="p-4 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg text-center transition-colors duration-200">
+                    <i class="fas fa-file-export text-2xl text-green-600 mb-2"></i>
+                    <p class="font-medium text-green-800 text-sm">Export Data</p>
+                </button>
+                
+                <button onclick="createBackup()" class="p-4 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-center transition-colors duration-200">
+                    <i class="fas fa-shield-alt text-2xl text-purple-600 mb-2"></i>
+                    <p class="font-medium text-purple-800 text-sm">Backup System</p>
+                </button>
+            </div>
+        </section>
+        <!-- Dashboard Overview -->
+        <section id="dashboard" class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-chart-bar mr-3 text-hindalco-purple"></i>Dashboard Overview
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-xl text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100">Total Tools</p>
+                            <p class="text-3xl font-bold" id="totalToolsCount">0</p>
+                        </div>
+                        <i class="fas fa-tools text-4xl opacity-75"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-xl text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100">Pending Requests</p>
+                            <p class="text-3xl font-bold pulse-animation" id="pendingRequestsCount">0</p>
+                        </div>
+                        <i class="fas fa-clock text-4xl opacity-75"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-xl text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100">Active Users</p>
+                            <p class="text-3xl font-bold" id="activeUsersCount">0</p>
+                        </div>
+                        <i class="fas fa-users text-4xl opacity-75"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-xl text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100">Tools in Use</p>
+                            <p class="text-3xl font-bold" id="toolsInUseCount">0</p>
+                        </div>
+                        <i class="fas fa-handshake text-4xl opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-time Pending Requests -->
+        <section id="requests" class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-clipboard-list mr-3 text-hindalco-purple"></i>Pending Tool Requests
+                    <span id="requestsBadge" class="ml-2 px-2 py-1 bg-red-500 text-white text-sm rounded-full hidden">0</span>
+                </h2>
+                <div class="flex items-center gap-4">
+                    <button onclick="refreshRequests()" class="px-4 py-2 bg-hindalco-purple text-white rounded-lg hover:bg-hindalco-purple-dark transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-600">Filter:</span>
+                        <select id="urgencyFilter" class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-hindalco-purple">
+                            <option value="">All Urgency</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">User</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tool</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Urgency</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Duration</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTableBody">
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-4xl mb-2 opacity-50"></i>
+                                <p>No pending requests</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tool Management -->
+        <section id="tools" class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-tools mr-3 text-hindalco-purple"></i>Tool Management
+                </h2>
+                <div class="flex items-center gap-4">
+                    <input type="text" id="toolSearchInput" placeholder="Search tools..." 
+                           class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple">
+                    <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple">
+                        <option value="">All Status</option>
+                        <option value="Available">Available</option>
+                        <option value="In Use">In Use</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Damaged">Damaged</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="toolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tools will be loaded here -->
+            </div>
+        </section>
+
+        <!-- User Management -->
+        <section id="users" class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-users mr-3 text-hindalco-purple"></i>User Management
+                </h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Department</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Role</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Request Review Modal -->
+    <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800">Review Tool Request</h3>
+                <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="requestDetails" class="bg-gray-50 rounded-lg p-4 mb-6">
+                <!-- Request details will be populated here -->
+            </div>
+            
+            <form id="reviewForm" class="space-y-4">
+                <input type="hidden" id="requestId">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Decision</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="decision" value="approved" class="mr-2" required>
+                            <span class="text-green-600 font-medium">Approve</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="decision" value="rejected" class="mr-2" required>
+                            <span class="text-red-600 font-medium">Reject</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Comments</label>
+                    <textarea id="reviewComments" rows="3" placeholder="Add your comments here..."
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple"></textarea>
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeReviewModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-hindalco-purple text-white rounded-lg hover:bg-hindalco-purple-dark transition-colors">
+                        Submit Review
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        let currentUser = null;
+        let tools = [];
+        let requests = [];
+        let users = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (!checkAuthentication('Manager')) {
+                return;
+            }
+
+            currentUser = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+            
+            // Initialize Socket.IO
+            socket = apiService.initSocket();
+            if (socket) {
+                socket.on('connect', () => {
+                    console.log('Connected to Socket.IO server');
+                    apiService.joinRoleRoom(currentUser.role);
+                });
+
+                // Listen for real-time updates
+                socket.on('request-created', (data) => {
+                    playNotificationSound();
+                    showNotification('New tool request received!', 'info');
+                    loadRequests();
+                    loadDashboardData();
+                });
+
+                socket.on('request-updated', (data) => {
+                    showNotification('Tool request updated!', 'info');
+                    loadRequests();
+                    loadDashboardData();
+                });
+            }
+
+            // Load initial data
+            await loadDashboardData();
+            await loadRequests();
+            await loadTools();
+            await loadUsers();
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Auto-refresh every 30 seconds
+            setInterval(loadRequests, 30000);
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const [toolsResponse, requestsResponse, usersResponse] = await Promise.all([
+                    apiService.getAllTools(),
+                    apiService.getAllToolRequests(),
+                    apiService.getAllUsers()
+                ]);
+                
+                if (toolsResponse.success) {
+                    const totalTools = toolsResponse.data.length;
+                    const toolsInUse = toolsResponse.data.filter(tool => tool.status === 'In Use').length;
+                    
+                    document.getElementById('totalToolsCount').textContent = totalTools;
+                    document.getElementById('toolsInUseCount').textContent = toolsInUse;
+                }
+
+                if (requestsResponse.success) {
+                    const pendingRequests = requestsResponse.data.filter(req => req.status === 'pending');
+                    document.getElementById('pendingRequestsCount').textContent = pendingRequests.length;
+                    
+                    // Update badge
+                    const badge = document.getElementById('pendingBadge');
+                    const requestsBadge = document.getElementById('requestsBadge');
+                    if (pendingRequests.length > 0) {
+                        badge.textContent = pendingRequests.length;
+                        badge.classList.remove('hidden');
+                        requestsBadge.textContent = pendingRequests.length;
+                        requestsBadge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                        requestsBadge.classList.add('hidden');
+                    }
+                }
+
+                if (usersResponse.success) {
+                    const activeUsers = usersResponse.data.filter(user => user.isActive).length;
+                    document.getElementById('activeUsersCount').textContent = activeUsers;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Error loading dashboard data', 'error');
+            }
+        }
+
+        // Load pending requests
+        async function loadRequests() {
+            try {
+                const response = await apiService.getAllToolRequests({ status: 'pending' });
+                if (response.success) {
+                    requests = response.data;
+                    displayRequests();
+                }
+            } catch (error) {
+                console.error('Error loading requests:', error);
+                showNotification('Error loading requests', 'error');
+            }
+        }
+
+        // Display requests in table
+        function displayRequests() {
+            const tbody = document.getElementById('requestsTableBody');
+            const urgencyFilter = document.getElementById('urgencyFilter').value;
+            
+            let filteredRequests = requests;
+            if (urgencyFilter) {
+                filteredRequests = requests.filter(req => req.urgency === urgencyFilter);
+            }
+            
+            if (filteredRequests.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-2 opacity-50"></i>
+                            <p>No pending requests</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredRequests.map(request => `
+                <tr class="border-b border-gray-100 ${getUrgencyRowColor(request.urgency)}">
+                    <td class="px-4 py-3">
+                        <div class="font-medium text-gray-800">${request.requestedBy.firstName} ${request.requestedBy.lastName}</div>
+                        <div class="text-sm text-gray-500">${request.requestedBy.department}</div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="font-medium text-gray-800">${request.tool.name}</div>
+                        <div class="text-sm text-gray-500">${request.tool.category}</div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="capitalize text-sm">${request.requestType}</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs rounded-full ${getUrgencyColor(request.urgency)}">
+                            ${request.urgency}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                        ${request.expectedDuration ? `${request.expectedDuration} days` : 'N/A'}
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        ${new Date(request.createdAt).toLocaleDateString()}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="viewRequestDetails('${request._id}')" class="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-eye mr-1"></i>View
+                            </button>
+                            <button onclick="openReviewModal('${request._id}')" class="px-3 py-1 text-xs bg-hindalco-purple text-white rounded hover:bg-hindalco-purple-dark transition-colors">
+                                <i class="fas fa-gavel mr-1"></i>Review
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load tools
+        async function loadTools() {
+            try {
+                const response = await apiService.getAllTools();
+                if (response.success) {
+                    tools = response.data;
+                    displayTools();
+                }
+            } catch (error) {
+                console.error('Error loading tools:', error);
+                showNotification('Error loading tools', 'error');
+            }
+        }
+
+        // Display tools
+        function displayTools() {
+            const toolsGrid = document.getElementById('toolsGrid');
+            const searchTerm = document.getElementById('toolSearchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            let filteredTools = tools;
+            
+            if (searchTerm) {
+                filteredTools = filteredTools.filter(tool => 
+                    tool.name.toLowerCase().includes(searchTerm) ||
+                    tool.category.toLowerCase().includes(searchTerm) ||
+                    tool.brand?.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter) {
+                filteredTools = filteredTools.filter(tool => tool.status === statusFilter);
+            }
+            
+            if (filteredTools.length === 0) {
+                toolsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <i class="fas fa-tools text-4xl mb-2 opacity-50"></i>
+                        <p>No tools found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            toolsGrid.innerHTML = filteredTools.map(tool => `
+                <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-800">${tool.name}</h3>
+                        <span class="px-2 py-1 text-xs rounded-full ${getStatusColor(tool.status)}">
+                            ${tool.status}
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-2 text-sm text-gray-600 mb-4">
+                        <p><i class="fas fa-tag mr-2"></i>Category: ${tool.category}</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Location: ${tool.location}</p>
+                        ${tool.assignedTo ? `<p><i class="fas fa-user mr-2"></i>Assigned to: ${tool.assignedTo.firstName} ${tool.assignedTo.lastName}</p>` : ''}
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="viewToolDetails('${tool._id}')" class="flex-1 px-3 py-2 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                        <button onclick="editTool('${tool._id}')" class="flex-1 px-3 py-2 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors">
+                            <i class="fas fa-edit mr-1"></i>Edit
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const response = await apiService.getAllUsers();
+                if (response.success) {
+                    users = response.data;
+                    displayUsers();
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showNotification('Error loading users', 'error');
+            }
+        }
+
+        // Display users
+        function displayUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            
+            tbody.innerHTML = users.map(user => `
+                <tr class="border-b border-gray-100">
+                    <td class="px-4 py-3">
+                        <div class="font-medium text-gray-800">${user.firstName} ${user.lastName}</div>
+                        <div class="text-sm text-gray-500">${user.employeeId}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm">${user.email}</td>
+                    <td class="px-4 py-3 text-sm">${user.department || 'N/A'}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs rounded-full ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${user.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="viewUserDetails('${user._id}')" class="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                                View
+                            </button>
+                            ${user.role !== 'Admin' ? `
+                                <button onclick="toggleUserStatus('${user._id}', ${user.isActive})" class="px-3 py-1 text-xs ${user.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white rounded transition-colors">
+                                    ${user.isActive ? 'Deactivate' : 'Activate'}
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // User menu toggle
+            document.getElementById('userMenuBtn').addEventListener('click', function() {
+                document.getElementById('userMenu').classList.toggle('hidden');
+            });
+
+            // Close user menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('userMenuBtn').contains(e.target)) {
+                    document.getElementById('userMenu').classList.add('hidden');
+                }
+            });
+
+            // Review form submission
+            document.getElementById('reviewForm').addEventListener('submit', submitReview);
+
+            // Filter events
+            document.getElementById('urgencyFilter').addEventListener('change', displayRequests);
+            document.getElementById('toolSearchInput').addEventListener('input', displayTools);
+            document.getElementById('statusFilter').addEventListener('change', displayTools);
+        }
+
+        // Modal functions
+        function openReviewModal(requestId) {
+            const request = requests.find(r => r._id === requestId);
+            if (!request) return;
+
+            document.getElementById('requestId').value = requestId;
+            document.getElementById('requestDetails').innerHTML = `
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Requested by:</p>
+                        <p class="text-gray-900">${request.requestedBy.firstName} ${request.requestedBy.lastName}</p>
+                        <p class="text-sm text-gray-500">${request.requestedBy.email}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Tool:</p>
+                        <p class="text-gray-900">${request.tool.name}</p>
+                        <p class="text-sm text-gray-500">${request.tool.category}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Request Type:</p>
+                        <p class="text-gray-900 capitalize">${request.requestType}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Urgency:</p>
+                        <span class="px-2 py-1 text-xs rounded-full ${getUrgencyColor(request.urgency)}">${request.urgency}</span>
+                    </div>
+                    ${request.expectedDuration ? `
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Duration:</p>
+                            <p class="text-gray-900">${request.expectedDuration} days</p>
+                        </div>
+                    ` : ''}
+                    <div class="col-span-2">
+                        <p class="text-sm font-medium text-gray-700">Reason:</p>
+                        <p class="text-gray-900">${request.reason}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+            document.getElementById('reviewForm').reset();
+        }
+
+        // Submit review
+        async function submitReview(e) {
+            e.preventDefault();
+            
+            const requestId = document.getElementById('requestId').value;
+            const decision = document.querySelector('input[name="decision"]:checked').value;
+            const comments = document.getElementById('reviewComments').value;
+            
+            try {
+                const response = await apiService.reviewToolRequest(requestId, {
+                    status: decision,
+                    reviewComments: comments
+                });
+                
+                if (response.success) {
+                    showNotification(`Request ${decision} successfully!`, 'success');
+                    closeReviewModal();
+                    await loadRequests();
+                    await loadDashboardData();
+                    
+                    // Emit socket event for real-time update
+                    if (socket) {
+                        socket.emit('request-reviewed', response.data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error reviewing request:', error);
+                showNotification('Error reviewing request: ' + error.message, 'error');
+            }
+        }
+
+        // Quick action functions
+        function refreshRequests() {
+            loadRequests();
+            showNotification('Requests refreshed!', 'info');
+        }
+
+        function viewRequestDetails(requestId) {
+            const request = requests.find(r => r._id === requestId);
+            if (request) {
+                alert(`Request Details:\n\nUser: ${request.requestedBy.firstName} ${request.requestedBy.lastName}\nTool: ${request.tool.name}\nType: ${request.requestType}\nUrgency: ${request.urgency}\nReason: ${request.reason}\nDate: ${new Date(request.createdAt).toLocaleDateString()}`);
+            }
+        }
+
+        function viewToolDetails(toolId) {
+            const tool = tools.find(t => t._id === toolId);
+            if (tool) {
+                alert(`Tool Details:\n\nName: ${tool.name}\nCategory: ${tool.category}\nStatus: ${tool.status}\nLocation: ${tool.location}\nBrand: ${tool.brand || 'N/A'}\nModel: ${tool.model || 'N/A'}`);
+            }
+        }
+
+        function editTool(toolId) {
+            showNotification('Tool editing feature coming soon!', 'info');
+        }
+
+        function viewUserDetails(userId) {
+            const user = users.find(u => u._id === userId);
+            if (user) {
+                alert(`User Details:\n\nName: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nRole: ${user.role}\nDepartment: ${user.department || 'N/A'}\nEmployee ID: ${user.employeeId}\nStatus: ${user.isActive ? 'Active' : 'Inactive'}`);
+            }
+        }
+
+        async function toggleUserStatus(userId, currentStatus) {
+            const action = currentStatus ? 'deactivate' : 'activate';
+            if (!confirm(`Are you sure you want to ${action} this user?`)) {
+                return;
+            }
+
+            try {
+                const endpoint = currentStatus ? `/users/${userId}` : `/users/${userId}/activate`;
+                const method = currentStatus ? 'DELETE' : 'PUT';
+                
+                const response = await apiService.request(endpoint, { method });
+                
+                if (response.success) {
+                    showNotification(`User ${action}d successfully!`, 'success');
+                    await loadUsers();
+                    await loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Error updating user status:', error);
+                showNotification('Error updating user status: ' + error.message, 'error');
+            }
+        }
+
+        // Utility functions
+        function getStatusColor(status) {
+            const colors = {
+                'Available': 'bg-green-100 text-green-800',
+                'In Use': 'bg-red-100 text-red-800',
+                'Maintenance': 'bg-yellow-100 text-yellow-800',
+                'Damaged': 'bg-red-100 text-red-800',
+                'Lost': 'bg-gray-100 text-gray-800'
+            };
+            return colors[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getUrgencyColor(urgency) {
+            const colors = {
+                'critical': 'bg-red-500 text-white badge-notification',
+                'high': 'bg-orange-100 text-orange-800',
+                'medium': 'bg-yellow-100 text-yellow-800',
+                'low': 'bg-green-100 text-green-800'
+            };
+            return colors[urgency] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getUrgencyRowColor(urgency) {
+            if (urgency === 'critical') {
+                return 'bg-red-50';
+            } else if (urgency === 'high') {
+                return 'bg-orange-50';
+            }
+            return '';
+        }
+
+        function getRoleColor(role) {
+            const colors = {
+                'Admin': 'bg-purple-100 text-purple-800',
+                'Manager': 'bg-blue-100 text-blue-800',
+                'Employee': 'bg-gray-100 text-gray-800'
+            };
+            return colors[role] || 'bg-gray-100 text-gray-800';
+        }
+
+        function playNotificationSound() {
+            // Create a simple notification sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                'success': 'bg-green-500',
+                'error': 'bg-red-500',
+                'info': 'bg-blue-500',
+                'warning': 'bg-yellow-500'
+            };
+            
+            notification.className = `notification ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
