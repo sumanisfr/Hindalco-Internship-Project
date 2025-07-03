@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Your App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-cog me-2"></i>Your App
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link active" href="settings.html">Settings</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <h1 class="mb-4 text-center">
+          <i class="fas fa-cog me-2"></i>Settings
+        </h1>
+        
+        <!-- Account Settings -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-user me-2"></i>Account Settings
+            </h5>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Update Account
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-sliders-h me-2"></i>Preferences
+            </h5>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="notifications" id="notifications">
+                <label class="form-check-label" for="notifications">
+                  <i class="fas fa-bell me-2"></i>Email Notifications
+                </label>
+              </div>
+              <div class="mb-3">
+                <label for="theme" class="form-label">Theme</label>
+                <select id="theme" name="theme" class="form-select">
+                  <option value="light">
+                    <i class="fas fa-sun"></i> Light
+                  </option>
+                  <option value="dark">
+                    <i class="fas fa-moon"></i> Dark
+                  </option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-success">
+                <i class="fas fa-check me-2"></i>Save Preferences
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Privacy & Security -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+              <i class="fas fa-shield-alt me-2"></i>Privacy & Security
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-outline-primary">
+                <i class="fas fa-key me-2"></i>Change Password
+              </button>
+              <button type="button" class="btn btn-outline-info">
+                <i class="fas fa-mobile-alt me-2"></i>Two-Factor Authentication
+              </button>
+              <button type="button" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-2"></i>Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">&copy; 2025 Your Company. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+  "name": "hindalco-tool-tracking-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Hindalco Tool Tracking System - Real-time web application for managing tools, users, and requests",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -o",
+    "serve": "python -m http.server 3000",
+    "dev": "npx live-server --port=3000 --open=index.html",
+    "build": "echo 'Building frontend assets...' && npm run minify",
+    "minify": "echo 'Minification would go here in production'",
+    "test": "echo 'Frontend tests would go here'",
+    "deploy": "echo 'Deployment script would go here'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-repo/hindalco-tool-tracking.git"
+  },
+  "keywords": [
+    "hindalco",
+    "tool-tracking",
+    "frontend",
+    "real-time",
+    "socket.io",
+    "dashboard",
+    "html",
+    "javascript",
+    "tailwind",
+    "responsive"
+  ],
+  "author": "Hindalco Industries Development Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-repo/hindalco-tool-tracking/issues"
+  },
+  "homepage": "https://github.com/your-repo/hindalco-tool-tracking#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

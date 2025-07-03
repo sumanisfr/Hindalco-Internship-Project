@@ -45,6 +45,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tool-requests', require('./routes/toolRequests'));
 app.use('/api/maintenance', require('./routes/maintenance'));
 app.use('/api/reports', require('./routes/reports'));
+// Additional routes will be added as needed
 
 // Test route
 app.get('/', (req, res) => {

@@ -67,6 +67,10 @@ const toolSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+  expectedReturnDate: {
+    type: Date,
+    default: null
+  },
   lastMaintenanceDate: {
     type: Date
   },

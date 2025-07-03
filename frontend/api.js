@@ -176,7 +176,90 @@ class ApiService {
     return this.request('/tool-requests/stats/dashboard');
   }
 
-  // Dashboard stats
+// User Management
+  async createUser(userData) {
+    return this.request('/users', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async updateUser(userId, userData) {
+    return this.request(`/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async deactivateUser(userId) {
+    return this.request(`/users/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Tool Management
+  async assignTool(toolId, userId) {
+    return this.request(`/tools/${toolId}/assign`, {
+      method: 'PUT',
+      body: JSON.stringify({ userId }),
+    });
+  }
+
+  async returnTool(toolId) {
+    return this.request(`/tools/${toolId}/assign`, {
+      method: 'PUT',
+      body: JSON.stringify({ userId: null }),
+    });
+  }
+
+  async requestTool(toolId, requestData) {
+    return this.request('/tool-requests', {
+      method: 'POST',
+      body: JSON.stringify({ tool: toolId, ...requestData }),
+    });
+  }
+
+  // Maintenance Scheduling
+  async scheduleMaintenance(data) {
+    return this.request('/maintenance', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateMaintenance(id, data) {
+    return this.request(`/maintenance/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Notifications
+  async sendNotification(notificationData) {
+    return this.request('/notifications', {
+      method: 'POST',
+      body: JSON.stringify(notificationData),
+    });
+  }
+
+  // Quick Actions
+  async performQuickAction(actionData) {
+    return this.request('/quick-actions', {
+      method: 'POST',
+      body: JSON.stringify(actionData),
+    });
+  }
+
+  // Data Export and Backup
+  async exportData(dataType) {
+    return this.request(`/reports/export/${dataType}`);
+  }
+
+  async createBackup() {
+    return this.request('/reports/backup', {
+      method: 'POST',
+    });
+  }
   async getDashboardStats() {
     return this.request('/users/stats/dashboard');
   }
