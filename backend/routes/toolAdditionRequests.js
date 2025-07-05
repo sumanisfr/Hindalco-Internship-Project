@@ -263,6 +263,13 @@ router.put('/:id/review', [
           status: 'Available'
         };
 
+        // Generate a serial number if not provided
+        if (!toolData.serialNumber || toolData.serialNumber.trim() === '') {
+          const timestamp = Date.now();
+          const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+          toolData.serialNumber = `${toolData.category.replace(/\s+/g, '').substring(0, 3).toUpperCase()}-${timestamp}-${random}`;
+        }
+
         createdTool = new Tool(toolData);
         await createdTool.save();
 

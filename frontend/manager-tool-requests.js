@@ -563,6 +563,8 @@ class ManagerToolRequestSystem {
   // Approve request
   async approveRequest(requestId, comments) {
     try {
+      console.log('Approving request:', requestId, 'with comments:', comments);
+      
       const reviewData = {
         status: 'approved',
         reviewComments: comments
@@ -570,19 +572,29 @@ class ManagerToolRequestSystem {
 
       const response = await apiService.reviewToolAdditionRequest(requestId, reviewData);
       
+      console.log('Approval response:', response);
+      
       if (response.success) {
-        this.showSuccessNotification('Request approved successfully!');
+        this.showSuccessNotification(response.message || 'Request approved successfully!');
         this.loadToolAdditionRequests(); // Refresh data
         
         // Close modal
         const modal = document.getElementById('approvalModal');
         if (modal) modal.remove();
       } else {
+        console.error('Approval failed:', response);
         this.showErrorMessage(response.message || 'Failed to approve request');
       }
     } catch (error) {
       console.error('Error approving request:', error);
-      this.showErrorMessage('Error approving request');
+      
+      // Extract more specific error information
+      let errorMessage = 'Error approving request';
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      this.showErrorMessage(errorMessage);
     }
   }
 

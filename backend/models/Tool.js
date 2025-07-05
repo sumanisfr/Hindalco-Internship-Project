@@ -33,6 +33,7 @@ const toolSchema = new mongoose.Schema({
   serialNumber: {
     type: String,
     unique: true,
+    sparse: true, // Allows multiple documents with null/undefined values
     trim: true,
     maxlength: [50, 'Serial number cannot exceed 50 characters']
   },
