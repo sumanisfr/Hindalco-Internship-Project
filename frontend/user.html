@@ -91,14 +91,20 @@
 
     <div class="flex items-center gap-6">
       <nav class="hidden sm:flex gap-5">
-        <a href="#"
+        <a href="#dashboard-overview"
           class="text-white hover:text-yellow-300 font-medium transition-colors duration-200 flex items-center">
           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+        </a>
+
+        <a href="#quick-actions"
+          class="text-white hover:text-yellow-300 font-medium transition-colors duration-200 flex items-center">
+          <i class="fas fa-bolt mr-2"></i>new Tool Requests
         </a>
         <a href="#tools"
           class="text-white hover:text-yellow-300 font-medium transition-colors duration-200 flex items-center">
           <i class="fas fa-tools mr-2"></i>My Tools
         </a>
+
         <a href="#reports"
           class="text-white hover:text-yellow-300 font-medium transition-colors duration-200 flex items-center">
           <i class="fas fa-chart-bar mr-2"></i>Reports
@@ -112,7 +118,7 @@
             class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mr-2">
             <i class="fas fa-user text-white text-sm"></i>
           </div>
-          <span class="hidden md:inline">John Doe</span>
+          <span class="hidden md:inline">Employee</span>
           <i class="fas fa-chevron-down ml-2 text-xs"></i>
         </button>
         <div
@@ -140,7 +146,7 @@
   </header>
 
   <main class="container mx-auto mt-8 p-4 space-y-8">
-    <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
+    <section id="dashboard-overview" class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-3xl font-bold text-white mb-4 flex items-center">
         <i class="fas fa-gauge-high mr-3 text-yellow-300"></i>Dashboard Overview
       </h2>
@@ -175,37 +181,11 @@
       </div>
     </section>
 
-    <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
-      <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
-        <i class="fas fa-bolt mr-3 text-yellow-300"></i>Quick Actions
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button id="addToolBtn"
-          class="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:scale-105 shadow-lg">
-          <i class="fas fa-plus-circle mr-3 text-xl"></i>
-          <span class="font-medium">Add Tool</span>
-        </button>
-        <button id="issueReturnBtn"
-          class="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-green-600 hover:to-green-700 hover:scale-105 shadow-lg">
-          <i class="fas fa-exchange-alt mr-3 text-xl"></i>
-          <span class="font-medium">Issue/Return</span>
-        </button>
-        <button id="generateReportBtn"
-          class="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-purple-600 hover:to-purple-700 hover:scale-105 shadow-lg">
-          <i class="fas fa-file-export mr-3 text-xl"></i>
-          <span class="font-medium">Generate Report</span>
-        </button>
-        <button id="searchToolsBtn"
-          class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-4 px-6 rounded-xl flex items-center justify-center transition-all duration-300 hover:from-yellow-600 hover:to-yellow-700 hover:scale-105 shadow-lg">
-          <i class="fas fa-search mr-3 text-xl"></i>
-          <span class="font-medium">Search Tools</span>
-        </button>
-      </div>
-    </section>
+   
 
     <section id="tools" class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
-        <i class="fas fa-clock-rotate-left mr-3 text-yellow-300"></i>Your Recent Tool Activity
+        <i class="fas fa-clock-rotate-left mr-3 text-yellow-300"></i> Recent Tool Activity
       </h2>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden">
@@ -227,10 +207,7 @@
               <td class="py-4 px-6 text-center space-x-2">
                 <button
                   class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
-                <button
-                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
-                <button
-                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+             
               </td>
             </tr>
             <tr class="border-b border-white/10 hover:bg-white/10 transition-colors">
@@ -242,10 +219,7 @@
               <td class="py-4 px-6 text-center space-x-2">
                 <button
                   class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
-                <button
-                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
-                <button
-                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+              
               </td>
             </tr>
             <tr class="border-b border-white/10 hover:bg-white/10 transition-colors">
@@ -257,10 +231,7 @@
               <td class="py-4 px-6 text-center space-x-2">
                 <button
                   class="view-btn bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">View</button>
-                <button
-                  class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors duration-200 text-sm">Edit</button>
-                <button
-                  class="delete-btn bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">Delete</button>
+             
               </td>
             </tr>
           </tbody>
@@ -274,41 +245,119 @@
       </div>
     </section>
 
+    <!-- My Tool Requests -->
     <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
       <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
         <i class="fas fa-plus-square mr-3 text-yellow-300"></i>Request New Tool
       </h2>
-      <form id="addToolForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <p class="text-gray-200 mb-6">Submit a request to add a new tool to the inventory. Your request will be reviewed by a manager.</p>
+      
+      <form id="toolAdditionRequestForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Tool Information -->
+        <div class="md:col-span-2">
+          <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+            <i class="fas fa-wrench mr-2"></i>Tool Information
+          </h3>
+        </div>
+        
         <div>
-          <label for="toolName" class="block text-white font-semibold mb-2">Tool Name</label>
-          <input type="text" id="toolName" placeholder="e.g., Torque Wrench"
+          <label for="toolName" class="block text-white font-semibold mb-2">Tool Name *</label>
+          <input type="text" id="toolName" placeholder="e.g., Torque Wrench Digital"
             class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
             required />
         </div>
+        
         <div>
-          <label for="toolStatus" class="block text-white font-semibold mb-2">Status</label>
-          <select id="toolStatus"
-            class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
+          <label for="toolCategory" class="block text-white/80 font-semibold mb-2">Category *</label>
+          <select id="toolCategory"
+            class="w-full px-4 py-3 border border-white/40 rounded-lg bg-yellow-300/10 text-white focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
             required>
-            <option value="Available">Available</option>
-            <option value="Issued">Issued</option>
-            <option value="Under Maintenance">Under Maintenance</option>
-            <option value="Lost">Lost</option>
+            <option value="">Select Category</option>
+            <option value="Hand Tools">Hand Tools</option>
+            <option value="Power Tools">Power Tools</option>
+            <option value="Measuring Tools">Measuring Tools</option>
+            <option value="Safety Equipment">Safety Equipment</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div class="col-span-1 md:col-span-2">
-          <label for="toolLocation" class="block text-white font-semibold mb-2">Location/Assigned To</label>
-          <input type="text" id="toolLocation" placeholder="e.g., Workshop B"
+        
+        <div class="md:col-span-2">
+          <label for="toolLocation" class="block text-white font-semibold mb-2">Proposed Location *</label>
+          <input type="text" id="toolLocation" placeholder="e.g., Workshop B, Section 3"
             class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
             required />
         </div>
-        <div class="col-span-1 md:col-span-2 text-right">
-          <button type="submit"
+      
+        <!-- Request Details -->
+        <div class="md:col-span-2 mt-4">
+          <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+            <i class="fas fa-clipboard-list mr-2"></i>Request Details
+          </h3>
+        </div>
+        
+        <div class="md:col-span-2">
+          <label for="requestReason" class="block text-white font-semibold mb-2">Reason for Request *</label>
+          <textarea id="requestReason" rows="3" placeholder="Why is this tool needed? What purpose will it serve?"
+            class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:border-yellow-300 backdrop-blur-sm"
+            required></textarea>
+        </div>
+        
+        <div>
+          <label for="requestUrgency" class="block text-gray-300 font-semibold mb-2">Urgency Level</label>
+          <select id="requestUrgency"
+            class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white focus:outline-none focus:border-yellow-300 backdrop-blur-sm">
+            <option value="low">Low - Can wait</option>
+            <option value="medium" selected>Medium - Normal priority</option>
+            <option value="high">High - Needed soon</option>
+            <option value="critical">Critical - Urgent</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="expectedReturn" class="block text-white font-semibold mb-2">Expected Return Date</label>
+          <input type="date" id="expectedReturn"
+            class="w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white focus:outline-none focus:border-yellow-300 backdrop-blur-sm" />
+        </div>
+
+        
+        <div class="md:col-span-2 text-right space-x-4 mt-6">
+          <button type="button" id="cancelRequestBtn"
+            class="bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-8 rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 font-semibold shadow-lg hover:scale-105">
+            <i class="fas fa-times mr-2"></i>Cancel
+          </button>
+          <button type="submit" id="submitRequestBtn"
             class="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-8 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-semibold shadow-lg hover:scale-105">
-            <i class="fas fa-save mr-2"></i>Save Tool
+            <i class="fas fa-paper-plane mr-2"></i>Submit Request
           </button>
         </div>
       </form>
+    </section>
+    
+    <!-- My Tool Requests -->
+    <section class="glass-effect rounded-xl shadow-xl p-6 card-hover">
+      <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+        <i class="fas fa-list-check mr-3 text-yellow-300"></i>My Tool Requests
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden">
+          <thead>
+            <tr class="bg-white/20 text-white uppercase text-sm font-semibold">
+              <th class="py-4 px-6 text-left">Tool Name</th>
+              <th class="py-4 px-6 text-left">Category</th>
+              <th class="py-4 px-6 text-left">Status</th>
+              <th class="py-4 px-6 text-left">Urgency</th>
+              <th class="py-4 px-6 text-left">Requested Date</th>
+              <th class="py-4 px-6 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-white text-sm" id="requestsTableBody">
+            <!-- Requests will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center mt-6" id="noRequestsMessage" style="display: none;">
+        <p class="text-gray-300">No tool addition requests found. Submit your first request above!</p>
+      </div>
     </section>
 
     <section id="reports" class="glass-effect rounded-xl shadow-xl p-6 card-hover">
@@ -432,7 +481,9 @@
     </div>
   </footer>
 
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script src="api.js"></script>
+  <script src="notification-system.js"></script>
   <script src="login.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -621,6 +672,228 @@
           // In a real application, this would trigger a file download
         });
       }
+
+      // Tool Addition Request Form Handler
+      const toolAdditionRequestForm = document.getElementById('toolAdditionRequestForm');
+      const cancelRequestBtn = document.getElementById('cancelRequestBtn');
+      const requestsTableBody = document.getElementById('requestsTableBody');
+      const noRequestsMessage = document.getElementById('noRequestsMessage');
+
+      if (toolAdditionRequestForm) {
+        toolAdditionRequestForm.addEventListener('submit', handleToolAdditionRequest);
+      }
+
+      if (cancelRequestBtn) {
+        cancelRequestBtn.addEventListener('click', clearRequestForm);
+      }
+
+      // Load user's tool addition requests on page load
+      loadToolAdditionRequests();
+
+      async function handleToolAdditionRequest(e) {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitRequestBtn');
+        const originalText = submitBtn.innerHTML;
+        
+        try {
+          // Show loading state
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Submitting...';
+
+          // Gather form data
+          const formData = {
+            toolData: {
+              name: document.getElementById('toolName').value.trim(),
+              category: document.getElementById('toolCategory').value,
+              location: document.getElementById('toolLocation').value.trim()
+            },
+            reason: document.getElementById('requestReason').value.trim(),
+            urgency: document.getElementById('requestUrgency').value,
+            expectedReturnDate: document.getElementById('expectedReturn').value || undefined
+          };
+
+          // Validate required fields
+          if (!formData.toolData.name || !formData.toolData.category || 
+              !formData.toolData.location || !formData.reason) {
+            throw new Error('Please fill in all required fields marked with *');
+          }
+
+          // Submit request to backend
+          const response = await apiService.createToolAdditionRequest(formData);
+          
+          if (response.success) {
+            // Show success message
+            alert('Tool addition request submitted successfully! You will be notified when it is reviewed.');
+            
+            // Clear form
+            clearRequestForm();
+            
+            // Reload requests table
+            loadToolAdditionRequests();
+          } else {
+            throw new Error(response.message || 'Failed to submit request');
+          }
+        } catch (error) {
+          console.error('Error submitting tool addition request:', error);
+          alert(`Error: ${error.message}`);
+        } finally {
+          // Restore button state
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+
+      function clearRequestForm() {
+        if (toolAdditionRequestForm) {
+          toolAdditionRequestForm.reset();
+          document.getElementById('requestUrgency').value = 'medium';
+        }
+      }
+
+      async function loadToolAdditionRequests() {
+        try {
+          const response = await apiService.getAllToolAdditionRequests();
+          
+          if (response.success && response.data) {
+            displayToolAdditionRequests(response.data);
+          } else {
+            showNoRequestsMessage();
+          }
+        } catch (error) {
+          console.error('Error loading tool addition requests:', error);
+          showNoRequestsMessage();
+        }
+      }
+
+      function displayToolAdditionRequests(requests) {
+        if (!requests || requests.length === 0) {
+          showNoRequestsMessage();
+          return;
+        }
+
+        requestsTableBody.innerHTML = '';
+        noRequestsMessage.style.display = 'none';
+
+        requests.forEach(request => {
+          const row = document.createElement('tr');
+          row.className = 'border-b border-white/10 hover:bg-white/10 transition-colors';
+          
+          const statusClass = getStatusClass(request.status);
+          const urgencyClass = getUrgencyClass(request.urgency);
+          
+          row.innerHTML = `
+            <td class="py-4 px-6 font-medium">${request.toolData.name}</td>
+            <td class="py-4 px-6">${request.toolData.category}</td>
+            <td class="py-4 px-6">
+              <span class="px-3 py-1 rounded-full ${statusClass} text-white text-xs font-semibold">
+                ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+              </span>
+            </td>
+            <td class="py-4 px-6">
+              <span class="px-2 py-1 rounded ${urgencyClass} text-xs font-medium">
+                ${request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
+              </span>
+            </td>
+            <td class="py-4 px-6">${new Date(request.createdAt).toLocaleDateString()}</td>
+            <td class="py-4 px-6 text-center space-x-2">
+              <button onclick="viewRequestDetails('${request._id}')" 
+                      class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm">
+                View
+              </button>
+              ${request.status === 'pending' ? `
+                <button onclick="cancelRequest('${request._id}')" 
+                        class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm">
+                  Cancel
+                </button>
+              ` : ''}
+            </td>
+          `;
+          
+          requestsTableBody.appendChild(row);
+        });
+      }
+
+      function showNoRequestsMessage() {
+        requestsTableBody.innerHTML = '';
+        noRequestsMessage.style.display = 'block';
+      }
+
+      function getStatusClass(status) {
+        switch (status) {
+          case 'pending': return 'bg-yellow-500';
+          case 'approved': return 'bg-green-500';
+          case 'rejected': return 'bg-red-500';
+          case 'cancelled': return 'bg-gray-500';
+          default: return 'bg-gray-500';
+        }
+      }
+
+      function getUrgencyClass(urgency) {
+        switch (urgency) {
+          case 'low': return 'bg-green-100 text-green-800';
+          case 'medium': return 'bg-yellow-100 text-yellow-800';
+          case 'high': return 'bg-orange-100 text-orange-800';
+          case 'critical': return 'bg-red-100 text-red-800';
+          default: return 'bg-gray-100 text-gray-800';
+        }
+      }
+
+      // Global functions for table actions
+      window.viewRequestDetails = async function(requestId) {
+        try {
+          const response = await apiService.getToolAdditionRequestById(requestId);
+          if (response.success) {
+            const request = response.data;
+            let details = `Tool Addition Request Details:\n\n`;
+            details += `Tool Name: ${request.toolData.name}\n`;
+            details += `Category: ${request.toolData.category}\n`;
+            details += `Location: ${request.toolData.location}\n`;
+            details += `Reason: ${request.reason}\n`;
+            details += `Urgency: ${request.urgency}\n`;
+            details += `Status: ${request.status}\n`;
+            details += `Requested Date: ${new Date(request.createdAt).toLocaleString()}\n`;
+            
+            if (request.reviewComments) {
+              details += `Review Comments: ${request.reviewComments}\n`;
+            }
+            
+            if (request.reviewedAt) {
+              details += `Reviewed Date: ${new Date(request.reviewedAt).toLocaleString()}\n`;
+            }
+            
+            alert(details);
+          }
+        } catch (error) {
+          alert('Error loading request details: ' + error.message);
+        }
+      };
+
+      window.cancelRequest = async function(requestId) {
+        if (confirm('Are you sure you want to cancel this request?')) {
+          try {
+            const response = await apiService.cancelToolAdditionRequest(requestId);
+            if (response.success) {
+              alert('Request cancelled successfully');
+              loadToolAdditionRequests();
+            } else {
+              alert('Error cancelling request: ' + response.message);
+            }
+          } catch (error) {
+            alert('Error cancelling request: ' + error.message);
+          }
+        }
+      };
+
+      // Listen for real-time notifications
+      document.addEventListener('notificationReceived', function(event) {
+        const notification = event.detail;
+        
+        // If it's a tool addition request notification, refresh the table
+        if (notification.data && (notification.data.requestId || notification.title.includes('Tool Addition'))) {
+          loadToolAdditionRequests();
+        }
+      });
 
       // Ensure the checkAuthentication is called when the page loads
       // Assuming checkAuthentication is defined in login.js and is globally accessible

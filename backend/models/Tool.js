@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const toolSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -7,12 +8,12 @@ const toolSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'Tool name cannot exceed 100 characters']
   },
-  description: {
-    type: String,
-    required: [true, 'Tool description is required'],
-    trim: true,
-    maxlength: [500, 'Description cannot exceed 500 characters']
-  },
+  // description: {
+  //   type: String,
+  //   required: [true, 'Tool description is required'],
+  //   trim: true,
+  //   maxlength: [500, 'Description cannot exceed 500 characters']
+  // },
   category: {
     type: String,
     required: [true, 'Tool category is required'],

@@ -773,6 +773,13 @@
           >
             <i class="fas fa-chart-bar mr-1"></i>Reports
           </a>
+          <a
+            href="#"
+            data-section="toolAdditionRequests"
+            class="text-hindalco-blue hover:text-hindalco-purple font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-plus-circle mr-1"></i>Tool Requests
+          </a>
         </nav>
 
         <!-- Profile Dropdown -->
@@ -846,6 +853,13 @@
             class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
           >
             <i class="fas fa-chart-bar mr-2"></i>Reports
+          </a>
+          <a
+            href="#"
+            data-section="toolAdditionRequests"
+            class="block px-4 py-2 text-hindalco-blue hover:bg-gray-100 rounded"
+          >
+            <i class="fas fa-plus-circle mr-2"></i>Tool Requests
           </a>
         </div>
       </div>
@@ -1087,6 +1101,96 @@
                 class="divide-y divide-gray-200"
               ></tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool Addition Requests Section -->
+      <div id="toolAdditionRequestsSection" class="content-section">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-plus-circle mr-3 text-hindalco-purple"></i>Tool Addition Requests
+            <span class="ml-2 bg-red-500 text-white text-sm px-2 py-1 rounded-full" id="pendingRequestsBadge" style="display: none;">0</span>
+          </h2>
+          <div class="flex space-x-3">
+            <button onclick="refreshToolAdditionRequests()" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+              <i class="fas fa-sync-alt"></i>Refresh
+            </button>
+            <select id="requestStatusFilter" onchange="filterToolAdditionRequests()" 
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <select id="requestUrgencyFilter" onchange="filterToolAdditionRequests()" 
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-hindalco-purple">
+              <option value="">All Urgency</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tool Addition Requests Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Total Requests</p>
+              <p id="totalAdditionRequests" class="text-3xl font-bold text-hindalco-blue">0</p>
+            </div>
+            <i class="fas fa-clipboard-list text-5xl text-hindalco-purple-dark opacity-20"></i>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Pending Review</p>
+              <p id="pendingAdditionRequests" class="text-3xl font-bold text-yellow-600">0</p>
+            </div>
+            <i class="fas fa-hourglass-half text-5xl text-yellow-600 opacity-20"></i>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Approved</p>
+              <p id="approvedAdditionRequests" class="text-3xl font-bold text-green-600">0</p>
+            </div>
+            <i class="fas fa-check-circle text-5xl text-green-600 opacity-20"></i>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Rejected</p>
+              <p id="rejectedAdditionRequests" class="text-3xl font-bold text-red-600">0</p>
+            </div>
+            <i class="fas fa-times-circle text-5xl text-red-600 opacity-20"></i>
+          </div>
+        </div>
+
+        <!-- Tool Addition Requests Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-hindalco-blue text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">Requester</th>
+                  <th class="py-3 px-4 text-left">Tool Name</th>
+                  <th class="py-3 px-4 text-left">Category</th>
+                  <th class="py-3 px-4 text-left">Urgency</th>
+                  <th class="py-3 px-4 text-left">Status</th>
+                  <th class="py-3 px-4 text-left">Requested Date</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="toolAdditionRequestsTableBody" class="divide-y divide-gray-200">
+                <!-- Requests will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center py-8" id="noAdditionRequestsMessage" style="display: none;">
+            <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-500">No tool addition requests found</p>
           </div>
         </div>
       </div>
@@ -1350,44 +1454,7 @@
       </div>
     </div>
 
-    <!-- Quick Actions Panel -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-bolt mr-2 text-hindalco-purple"></i>Quick Actions
-      </h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <button
-          onclick="openModal('toolAssignmentModal')"
-          class="bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-4 text-center transition-colors duration-200"
-        >
-          <i class="fas fa-hand-holding text-2xl text-blue-600 mb-2"></i>
-          <p class="font-medium text-blue-800 text-sm">Assign Tool</p>
-        </button>
-        <button
-          onclick="scheduleMaintenanceAlert()"
-          class="bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg p-4 text-center transition-colors duration-200"
-        >
-          <i class="fas fa-calendar-alt text-2xl text-orange-600 mb-2"></i>
-          <p class="font-medium text-orange-800 text-sm">
-            Schedule Maintenance
-          </p>
-        </button>
-        <button
-          onclick="exportData()"
-          class="bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg p-4 text-center transition-colors duration-200"
-        >
-          <i class="fas fa-file-export text-2xl text-green-600 mb-2"></i>
-          <p class="font-medium text-green-800 text-sm">Export Data</p>
-        </button>
-        <button
-          onclick="backupData()"
-          class="bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-4 text-center transition-colors duration-200"
-        >
-          <i class="fas fa-shield-alt text-2xl text-purple-600 mb-2"></i>
-          <p class="font-medium text-purple-800 text-sm">Backup System</p>
-        </button>
-      </div>
-    </div>
+    
 
     <!-- Settings Section -->
     <div id="settingsSection" class="content-section">
@@ -1655,6 +1722,10 @@
         updateNavigation();
       });
     </script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="api.js"></script>
+    <script src="notification-system.js"></script>
+    <script src="manager-tool-requests.js"></script>
     <script src="login.js"></script>
   </body>
 </html>

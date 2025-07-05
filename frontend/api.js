@@ -328,6 +328,47 @@ class ApiService {
     });
   }
 
+  // Tool Addition Request methods
+  async getAllToolAdditionRequests(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/tool-addition-requests${queryString ? '?' + queryString : ''}`);
+  }
+
+  async getToolAdditionRequestById(requestId) {
+    return this.request(`/tool-addition-requests/${requestId}`);
+  }
+
+  async createToolAdditionRequest(requestData) {
+    return this.request('/tool-addition-requests', {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+    });
+  }
+
+  async reviewToolAdditionRequest(requestId, reviewData) {
+    return this.request(`/tool-addition-requests/${requestId}/review`, {
+      method: 'PUT',
+      body: JSON.stringify(reviewData),
+    });
+  }
+
+  async cancelToolAdditionRequest(requestId) {
+    return this.request(`/tool-addition-requests/${requestId}/cancel`, {
+      method: 'PUT',
+    });
+  }
+
+  async getToolAdditionRequestStats() {
+    return this.request('/tool-addition-requests/stats/dashboard');
+  }
+
+  async updateToolAdditionRequestPriority(requestId, priority) {
+    return this.request(`/tool-addition-requests/${requestId}/priority`, {
+      method: 'PUT',
+      body: JSON.stringify({ priority }),
+    });
+  }
+
   // Health check method
   async healthCheck() {
     try {

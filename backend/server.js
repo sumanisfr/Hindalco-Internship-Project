@@ -43,6 +43,7 @@ app.use('/api/tools', require('./routes/tools'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tool-requests', require('./routes/toolRequests'));
+app.use('/api/tool-addition-requests', require('./routes/toolAdditionRequests'));
 app.use('/api/maintenance', require('./routes/maintenance'));
 app.use('/api/reports', require('./routes/reports'));
 // Additional routes will be added as needed
