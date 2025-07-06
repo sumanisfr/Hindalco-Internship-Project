@@ -1,6 +1,9 @@
-// API Configuration
-const API_BASE_URL = 'http://localhost:5000/api';
-const SOCKET_URL = 'http://localhost:5000';
+// // API Configuration
+// const API_BASE_URL = 'http://localhost:5000/api';
+// const SOCKET_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://internship-project.onrender.com/api';
+const SOCKET_URL = 'https://internship-project.onrender.com';
+
 
 // API Service class for handling all backend communications
 class ApiService {
