@@ -10,14 +10,14 @@ const server = http.createServer(app);
 
 // ✅ Allow Vercel frontend origin
 app.use(cors({
-  origin: "https://hindalco-internship-project-savn.vercel.app",
+  origin: "https://internship-ten-rho.vercel.app/register.html",
   credentials: true
 }));
 
 // ✅ Use same origin for Socket.IO
 const io = socketIo(server, {
   cors: {
-    origin: "https://hindalco-internship-project-savn.vercel.app",
+    origin: "https://internship-ten-rho.vercel.app/register.html",
     methods: ["GET", "POST"],
     credentials: true
   }
