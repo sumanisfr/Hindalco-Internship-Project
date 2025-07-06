@@ -7,8 +7,7 @@
     "start": "npx http-server -p 3000 -o",
     "serve": "python -m http.server 3000",
     "dev": "npx live-server --port=3000 --open=index.html",
-    "build": "echo 'Building frontend assets...' && npm run minify",
-    "minify": "echo 'Minification would go here in production'",
+
     "test": "echo 'Frontend tests would go here'",
     "deploy": "echo 'Deployment script would go here'"
   },
