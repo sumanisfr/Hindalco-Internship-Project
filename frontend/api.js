@@ -176,7 +176,7 @@ class ApiService {
     return this.request('/tool-requests/stats/dashboard');
   }
 
-// User Management
+  // User Management
   async createUser(userData) {
     return this.request('/users', {
       method: 'POST',
