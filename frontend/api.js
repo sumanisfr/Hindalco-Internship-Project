@@ -375,7 +375,7 @@ class ApiService {
   // Health check method
   async healthCheck() {
     try {
-      const response = await fetch('http://localhost:5000/');
+      const response = await fetch('https://i-nternship-project.onrender.com/');
       return await response.json();
     } catch (error) {
       throw new Error('Backend server is not running');
